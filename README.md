@@ -88,11 +88,11 @@ spreadsheet.add({
 
 #### API
 
-#####spreadsheet.`add( obj | array)`
+#####spreadsheet.`add( obj | array )`
 Add cells to the batch. See examples.
 
-#####spreadsheet.`send( callback)`
-Sends off the batch of `add`ed cells. Clears all cells once complete.
+#####spreadsheet.`send( callback )`
+Sends off the batch of `add`ed cells. Clears all cells once complete. Callback has signature: `funciton(err, result) {}`.
 
 #### Todo
 
