@@ -96,6 +96,8 @@ Sends off the batch of `add`ed cells. Clears all cells once complete. Callback h
 
 #### Todo
 
+* OAuth
+* Create New Spreadsheets
 * Read Spreadsheet data
 * List Spreadsheets on account
 * List Worksheets on spreadsheet
