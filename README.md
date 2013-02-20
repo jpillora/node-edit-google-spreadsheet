@@ -88,7 +88,7 @@ spreadsheet.add({
 
 #### API
 
-###### spreadsheet.`add( obj | array)`
+#####spreadsheet.`add( obj | array)`
 Add cells to the batch. See examples.
 
 #####spreadsheet.`send( callback)`
