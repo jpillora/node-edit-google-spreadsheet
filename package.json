@@ -1,0 +1,13 @@
+{
+  "name": "edit-google-spreadsheet",
+  "version": "0.0.1",
+  "dependencies": [
+    "colors",
+    "underscore",
+    "request",
+    "googleclientlogin"
+  ],
+  "engines": {
+    "node": "~0.8.x"
+  }
+}
