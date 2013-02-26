@@ -53,7 +53,7 @@ Spreadsheet.prototype.auth = function(usr, pw, done) {
 };
 
 Spreadsheet.prototype.baseUrl = function() {
-  return 'https://spreadsheets.google.com/feeds/cells/' + this.spreadsheetId + '/' + this.worksheetId + '/private/full';
+  return 'http://spreadsheets.google.com/feeds/cells/' + this.spreadsheetId + '/' + this.worksheetId + '/private/full';
 };
 
 Spreadsheet.prototype.setTemplates = function() {
