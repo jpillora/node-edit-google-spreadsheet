@@ -19,7 +19,6 @@ Create sheet:
     username: '...',
     password: '...',
     spreadsheetId: '...',
-    //summary tab
     worksheetId: '...',
     callback: function(err, spreadsheet) {
       if(err) throw err;
