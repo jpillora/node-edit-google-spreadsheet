@@ -101,6 +101,21 @@ Sends off the batch of `add`ed cells. Clears all cells once complete. Callback h
 * List Spreadsheets on account
 * List Worksheets on spreadsheet
 
+#### FAQ
+
+* Q: How do I append rows to my spreadsheet ?
+* A: Currently this is not supported as the module would need to calculate the last blank row and it does not do this yet. Your best option is to do something like:
+
+```javascript
+var current = 0;
+var append = function(row) {
+  var r = {};
+  r[current++] = row; //row can be an array or an object with integer keys
+  spreadsheet.add(r);
+};
+
+```
+
 #### Credits
 
 Thanks to `googleclientlogin` for easy Google API ClientLogin Tokens
