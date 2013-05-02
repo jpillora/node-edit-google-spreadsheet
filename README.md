@@ -37,7 +37,7 @@ Update sheet:
   
     spreadsheet.send(function(err) {
       if(err) throw err;
-      console.log("Updated Cell at row 3, column 5 to "hello!");
+      console.log("Updated Cell at row 3, column 5 to 'hello!'");
     });
   }
 ```
@@ -78,7 +78,7 @@ spreadsheet.add({
   3: {
     4: { name: "a", val: 42 },
     5: { name: "b", val: 21 },
-    6: "={{ a }}+{{ b }}"      //forumla with =D3+D5
+    6: "={{ a }}+{{ b }}"      //forumla adding row3,col4 with row3,col5 => '=C3+C4'
   }
 });
 ```
