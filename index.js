@@ -4,7 +4,7 @@
 //module for using the google api to retrieve anayltics data in an object
 require("colors");
 var request = require("request"),
-    _ = require("underscore"),
+    _ = require("lodash"),
     GoogleClientLogin = require('googleclientlogin').GoogleClientLogin;
 
 //parse number
@@ -17,6 +17,31 @@ var num = function(obj) {
     return res;
   }
   throw "Invalid number: " + JSON.stringify(obj);
+};
+
+//public api
+exports.create = function(opts) {
+  var s = new Spreadsheet();
+
+  if(!opts.callback) throw "Missing callback";
+
+  var check = function(n) {
+    if(opts[n])
+      return true;
+    else
+      opts.callback("Missing '"+n+"'");
+    return false;
+  };
+
+  if(!(check('username') && check('password') &&
+    check('spreadsheetId') && check('worksheetId'))) return;
+
+  s.spreadsheetId = opts.spreadsheetId;
+  s.worksheetId = opts.worksheetId;
+  s.setTemplates();
+  s.auth(opts.username, opts.password, function(err) {
+    opts.callback(err, s);
+  });
 };
 
 //spreadsheet class
@@ -78,9 +103,9 @@ Spreadsheet.prototype.setTemplates = function() {
 };
 
 Spreadsheet.prototype.reset = function() {
-  //map { r: { c: X, c: Y }}
+  //map { r: { c: CELLX, c: CELLY }}
   this.entries = {};
-  //map { name: cell-in-entries }
+  //map { name: CELL }
   this.names = {};
 };
 
@@ -96,7 +121,6 @@ Spreadsheet.prototype.arr = function(arr, ro, co) {
   var i, j, rows, cols, rs, cs;
 
   // console.log("Add Array: " + JSON.stringify(arr));
-
   ro = num(ro);
   co = num(co);
 
@@ -221,12 +245,10 @@ Spreadsheet.prototype.send = function(callback) {
 
   var _this = this,
       entries = this.toString(),
-      body = this.bodyTemplate({
-        entries: entries
-      });
+      body = this.bodyTemplate({ entries: entries });
 
   //finally send all the entries
-  console.log(("Updating Google Docs").grey);
+  console.log(("Updating Google Docs...").grey);
   // console.log(entries.white);
   request({
     url: this.baseUrl() + '/batch',
@@ -252,38 +274,9 @@ Spreadsheet.prototype.send = function(callback) {
     } else {
       console.log(successMessage.green);
     }
-    
+
     callback(error, !error ? successMessage : null);
   });
 
-};
-
-//public api
-module.exports = {
-  create: function(opts) {
-    var s = new Spreadsheet();
-
-    if(!opts.callback) throw "Missing callback";
-
-    var check = function(n) {
-      if(opts[n])
-        return true;
-      else
-        opts.callback("Missing '"+n+"'");
-      return false;
-    };
-
-    if(!(check('username') &&
-         check('password') &&
-         check('worksheetId') &&
-         check('worksheetId'))) return;
-
-    s.spreadsheetId = opts.spreadsheetId;
-    s.worksheetId = opts.worksheetId;
-    s.setTemplates();
-    s.auth(opts.username, opts.password, function(err) {
-      opts.callback(err, s);
-    });
-  }
 };
 
