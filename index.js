@@ -323,7 +323,7 @@ Spreadsheet.prototype.getRows = function(callback){
           
           for(var e in result.entry){
             
-            var rowNumber = result.entry[e].title.substring(1);
+            var rowNumber = parseInt(result.entry[e].title.match(/([0-9]+)/));
             if(!_.isArray(rows[rowNumber])){
               rows[rowNumber] = [];
             }
