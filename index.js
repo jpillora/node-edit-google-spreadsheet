@@ -20,44 +20,11 @@ var num = function(obj) {
   throw "Invalid number: " + JSON.stringify(obj);
 };
 
-//public api
-exports.create = function(opts) {
-  var s = new Spreadsheet();
-
-  if(!opts.callback) throw "Missing callback";
-
-  var check = function(n) {
-    if(opts[n])
-      return true;
-    else
-      opts.callback("Missing '"+n+"'");
-    return false;
-  };
-
-  if(!(check('username') && check('password') &&
-    check('spreadsheetId') && check('worksheetId'))) return;
-
-  s.spreadsheetId = opts.spreadsheetId;
-  s.worksheetId = opts.worksheetId;
-  s.setTemplates();
-  s.auth(opts.username, opts.password, function(err) {
-    opts.callback(err, s);
-  });
-};
-
-//spreadsheet class
-function Spreadsheet() {
-  this.token = null;
-  this.authed = false;
-  this.reset();
-}
-
-Spreadsheet.prototype.auth = function(usr, pw, done) {
+//client auth helper
+var auth = function(usr, pw, done) {
   if(!usr || !pw || !done) return;
 
-  console.log('Logging into GDrive...'.grey);
-
-  var _this = this;
+  console.log('Logging into Google...'.grey);
 
   var googleAuth = new GoogleClientLogin({
     email: usr,
@@ -71,12 +38,90 @@ Spreadsheet.prototype.auth = function(usr, pw, done) {
   });
   //success - next step
   googleAuth.on(GoogleClientLogin.events.login, function() {
-    console.log('Logged into GDrive'.green);
-    _this.setToken(googleAuth.getAuthId());
-    done(null, _this);
+    console.log('Logged into Google'.green);
+    done(null, googleAuth.getAuthId());
   });
   googleAuth.login();
 };
+
+//xml parser helper, transformed to node callback style
+var parseXML = function(str, callback) {
+  var parser = new xml2js.Parser(xml2js.defaults["0.1"]);
+  parser.on("end", function(result) {
+    callback(null, result);
+  });
+  parser.on("error", function(err) {
+    callback(err, null);
+  });
+  parser.parseString(str);
+};
+
+//public api
+exports.create = function(opts) {
+  var spreadsheet = new Spreadsheet();
+
+  if(!opts.callback) throw "Missing callback";
+
+  var check = function(n) {
+    if(opts[n])
+      return true;
+    else
+      opts.callback("Missing '"+n+"'");
+    return false;
+  };
+
+  // if(!(check('username') && check('password') &&
+  //   check('spreadsheetId') && check('worksheetId'))) return;
+
+  // spreadsheet.spreadsheetId = opts.spreadsheetId;
+  // spreadsheet.worksheetId = opts.worksheetId;
+  // spreadsheet.setTemplates();
+
+  auth(opts.username, opts.password, function(err, token) {
+    spreadsheet.setToken(token);
+    // opts.callback(err, spreadsheet);
+
+    console.log("got token".yellow);
+
+    spreadsheet.getAll(function(err, sheets) {
+
+      console.log(err || sheets);
+
+    });
+
+  });
+};
+
+//spreadsheet class
+function Spreadsheet() {
+  this.token = null;
+  this.reset();
+}
+
+
+Spreadsheet.prototype.getAll = function(callback) {
+  request({
+    url: Spreadsheet.spreadsheetsUrl,
+    method: 'GET',
+    headers: this.authHeaders
+  },
+  function(err, response, body) {
+
+    if(err) return callback(err, null);
+
+    parseXML(body, function(err, result) {
+      if(err) return callback(err, null);
+      callback(null, result);
+    });
+    
+  });
+};
+
+Spreadsheet.prototype.getAllWorksheets = function() {
+
+};
+
+
 
 Spreadsheet.prototype.setToken = function(token) {
   this.token = token;
@@ -88,7 +133,7 @@ Spreadsheet.prototype.setToken = function(token) {
   };
 };
 
-Spreadsheet.prototype.spreadsheetsUrl = 
+Spreadsheet.spreadsheetsUrl = 
   'https://spreadsheets.google.com/feeds/spreadsheets/private/full';
 
 Spreadsheet.prototype.baseUrl = function() {
@@ -271,8 +316,10 @@ Spreadsheet.prototype.send = function(callback) {
     body: body
   },
   function(error, response, body) {
-    if(error)
-      return callback(error, null);
+
+    if(error) return callback(error, null);
+    
+    //data has been successfully, clear it
     _this.reset();
 
     var successMessage = "Successfully Updated Spreadsheet";
@@ -302,23 +349,23 @@ Spreadsheet.prototype.getRows = function(callback){
     method: 'GET',
     headers: this.authHeaders
   },
-  function(error, response, body) {
+  function(err, response, body) {
 
-    if(error) return callback(error, null);
-    
-    _this.reset();
+    if(err) return callback(err, null);
 
     if(body.indexOf("success='0'") >= 0) {
-      console.log(error.red.underline + ("\nResponse:\n" + body));
+      console.log(err.red.underline + ("\nResponse:\n" + body));
       callback("Error Reading Spreadsheet", null);
+      return;
     }
     
     console.log("Parsing Rows from Spreadsheet...".green);
     
-    var parser = new xml2js.Parser(xml2js.defaults["0.1"]);
-
-    parser.on("end", function(result) {
+    parseXML(body, function(err, result) {
       
+      if(err)
+        return callback(err, null);
+
       var rows = {};
       var maxRow = 0;
       
@@ -354,11 +401,6 @@ Spreadsheet.prototype.getRows = function(callback){
       callback(null,rows);
     });
 
-    parser.on("error", function(err) {
-      return callback(err, null);
-    });
-
-    parser.parseString(body);
   });
 
 };
