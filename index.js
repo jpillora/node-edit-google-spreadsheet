@@ -5,6 +5,7 @@
 require("colors");
 var request = require("request"),
     _ = require("lodash"),
+    xml2js = require("xml2js"),
     GoogleClientLogin = require('googleclientlogin').GoogleClientLogin;
 
 //parse number
