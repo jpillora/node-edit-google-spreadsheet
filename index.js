@@ -5,6 +5,7 @@
 require("colors");
 var request = require("request"),
     _ = require("lodash"),
+    xml2js = require("xml2js"),
     GoogleClientLogin = require('googleclientlogin').GoogleClientLogin;
 
 //parse number
@@ -276,6 +277,89 @@ Spreadsheet.prototype.send = function(callback) {
     }
 
     callback(error, !error ? successMessage : null);
+  });
+
+};
+
+Spreadsheet.prototype.getRows = function(callback){
+
+  if(!this.token)
+    return callback("No authorization token. Use auth() first.");
+
+  var _this = this;
+
+  // get some stuff
+  request({
+    url: this.baseUrl(),
+    method: 'GET',
+    headers: {
+      'Authorization': 'GoogleLogin auth=' + this.token,
+      'Content-Type': 'application/atom+xml',
+      'GData-Version': '3.0',
+      'If-Match': '*'
+    }
+  },
+  function(error, response, body) {
+    if(error)
+      return callback(error, null);
+    _this.reset();
+
+    var successMessage = "Google returned";
+
+    if(body.indexOf("success='0'") >= 0) {
+      error = "Error Reading Spreadsheet";
+      console.log(error.red.underline + ("\nResponse:\n" + body));
+    } else {
+    
+      console.log(successMessage.green);
+      
+      var parser = new xml2js.Parser(xml2js.defaults["0.1"]);
+      parser.on("end", function(result) {
+        
+        var rows = {};
+        var maxRow = 0;
+        // process the results and make them into rows
+        if(!_.isUndefined(result.entry) && _.isArray(result.entry)){
+          
+          for(var e in result.entry){
+            
+            var rowNumber = parseInt(result.entry[e].title.match(/([0-9]+)/));
+            if(!_.isArray(rows[rowNumber])){
+              rows[rowNumber] = [];
+            }
+            
+            // work out the max row
+            (maxRow < rowNumber?maxRow = rowNumber:'');
+            
+            // add the cell to the row
+            rows[rowNumber].push(result.entry[e]);
+          }
+          
+          // add a few handy variables
+          rows.total_rows = _.size(rows);
+          rows.last_row = parseInt(maxRow);
+          rows.next_row = parseInt(maxRow)+1;
+          
+          console.log("Found "+_.size(rows)+" rows".green);
+          
+          callback(null,rows);
+        }
+        else{
+          rows.total_rows = 0;
+          rows.last_row = 1
+          callback(null, rows);
+        }
+        
+      });
+
+      parser.on("error", function(err) {
+        return(err, null);
+      });
+
+      console.log("Parsing XML".yellow);
+      parser.parseString(body);
+    
+    }
   });
 
 };

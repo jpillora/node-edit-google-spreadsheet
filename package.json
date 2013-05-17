@@ -1,10 +1,11 @@
 {
   "name": "edit-google-spreadsheet",
-  "version": "0.0.4",
+  "version": "0.0.4d",
   "dependencies": {
     "colors": "~0.6.0-1",
     "googleclientlogin": "~0.2.6",
     "lodash": "~1.2.1",
-    "request": "~2.21.0"
+    "request": "~2.21.0",
+    "xml2js": "0.2.7"
   }
 }
