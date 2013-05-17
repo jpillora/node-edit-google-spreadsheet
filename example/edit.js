@@ -1,12 +1,23 @@
-var Spreadsheet = require('../'),
-    creds = require('./creds.json');
+
+
+var Spreadsheet = require('../');
+
+//load example credential file
+//in production, use enviroment variables instead
+var fs = require('fs');
+if(!fs.existsSync('./creds.json')) {
+  console.log('Please make a "creds.json" file to use this example.');
+  process.exit(1);
+}
+var creds = require('./creds.json');
 
 Spreadsheet.create({
   //auth
   username: creds.username,
   password: creds.password,
-  spreadsheetId: '...',
-  worksheetId: '...',
+  //retrieve by name in progress...
+  spreadsheetName: '...',
+  worksheetName: '...',
   callback: function(err, spreadsheet) {
     if(err) throw err;
     sheetReady(spreadsheet);

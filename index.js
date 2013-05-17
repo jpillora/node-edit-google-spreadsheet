@@ -72,11 +72,24 @@ Spreadsheet.prototype.auth = function(usr, pw, done) {
   //success - next step
   googleAuth.on(GoogleClientLogin.events.login, function() {
     console.log('Logged into GDrive'.green);
-    _this.token = googleAuth.getAuthId();
+    _this.setToken(googleAuth.getAuthId());
     done(null, _this);
   });
   googleAuth.login();
 };
+
+Spreadsheet.prototype.setToken = function(token) {
+  this.token = token;
+  this.authHeaders = {
+    'Authorization': 'GoogleLogin auth=' + token,
+    'Content-Type': 'application/atom+xml',
+    'GData-Version': '3.0',
+    'If-Match': '*'
+  };
+};
+
+Spreadsheet.prototype.spreadsheetsUrl = 
+  'https://spreadsheets.google.com/feeds/spreadsheets/private/full';
 
 Spreadsheet.prototype.baseUrl = function() {
   return 'http://spreadsheets.google.com/feeds/cells/' + this.spreadsheetId + '/' + this.worksheetId + '/private/full';
@@ -254,12 +267,7 @@ Spreadsheet.prototype.send = function(callback) {
   request({
     url: this.baseUrl() + '/batch',
     method: 'POST',
-    headers: {
-      'Authorization': 'GoogleLogin auth=' + this.token,
-      'Content-Type': 'application/atom+xml',
-      'GData-Version': '3.0',
-      'If-Match': '*'
-    },
+    headers: this.authHeaders,
     body: body
   },
   function(error, response, body) {
@@ -292,74 +300,65 @@ Spreadsheet.prototype.getRows = function(callback){
   request({
     url: this.baseUrl(),
     method: 'GET',
-    headers: {
-      'Authorization': 'GoogleLogin auth=' + this.token,
-      'Content-Type': 'application/atom+xml',
-      'GData-Version': '3.0',
-      'If-Match': '*'
-    }
+    headers: this.authHeaders
   },
   function(error, response, body) {
-    if(error)
-      return callback(error, null);
+
+    if(error) return callback(error, null);
+    
     _this.reset();
 
-    var successMessage = "Google returned";
-
     if(body.indexOf("success='0'") >= 0) {
-      error = "Error Reading Spreadsheet";
       console.log(error.red.underline + ("\nResponse:\n" + body));
-    } else {
-    
-      console.log(successMessage.green);
-      
-      var parser = new xml2js.Parser(xml2js.defaults["0.1"]);
-      parser.on("end", function(result) {
-        
-        var rows = {};
-        var maxRow = 0;
-        // process the results and make them into rows
-        if(!_.isUndefined(result.entry) && _.isArray(result.entry)){
-          
-          for(var e in result.entry){
-            
-            var rowNumber = parseInt(result.entry[e].title.match(/([0-9]+)/));
-            if(!_.isArray(rows[rowNumber])){
-              rows[rowNumber] = [];
-            }
-            
-            // work out the max row
-            (maxRow < rowNumber?maxRow = rowNumber:'');
-            
-            // add the cell to the row
-            rows[rowNumber].push(result.entry[e]);
-          }
-          
-          // add a few handy variables
-          rows.total_rows = _.size(rows);
-          rows.last_row = parseInt(maxRow);
-          rows.next_row = parseInt(maxRow)+1;
-          
-          console.log("Found "+_.size(rows)+" rows".green);
-          
-          callback(null,rows);
-        }
-        else{
-          rows.total_rows = 0;
-          rows.last_row = 1
-          callback(null, rows);
-        }
-        
-      });
-
-      parser.on("error", function(err) {
-        return(err, null);
-      });
-
-      console.log("Parsing XML".yellow);
-      parser.parseString(body);
-    
+      callback("Error Reading Spreadsheet", null);
     }
+    
+    console.log("Parsing Rows from Spreadsheet...".green);
+    
+    var parser = new xml2js.Parser(xml2js.defaults["0.1"]);
+
+    parser.on("end", function(result) {
+      
+      var rows = {};
+      var maxRow = 0;
+      
+      // no rows - return empty
+      if(!_.isArray(result.entry)){
+        rows.totalRows = 0;
+        rows.lastRow = 1;
+        callback(null, rows);
+        return;
+      }
+        
+      _.each(result.entry, function(entry) {
+
+        var rowNumber = parseInt(entry.title.match(/([0-9]+)/), 10);
+
+        if(!_.isArray(rows[rowNumber]))
+          rows[rowNumber] = [];
+                  
+        // work out the max row
+        if(maxRow < rowNumber)  maxRow = rowNumber;
+        
+        // add the cell to the row
+        rows[rowNumber].push(entry);
+      });
+      
+      // add a few handy variables
+      rows.totalRows = _.size(rows);
+      rows.lastRow = maxRow;
+      rows.nextRow = maxRow+1;
+      
+      console.log("Found "+rows.totalRows+" Rows".green);
+      
+      callback(null,rows);
+    });
+
+    parser.on("error", function(err) {
+      return callback(err, null);
+    });
+
+    parser.parseString(body);
   });
 
 };
