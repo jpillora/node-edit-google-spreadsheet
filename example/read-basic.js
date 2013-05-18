@@ -9,15 +9,13 @@ Spreadsheet.create({
   worksheetName: 'Sheet1',
   // spreadsheetId: 'ttFmrFPIipJimDQYSFyhwTg',
   // worksheetId: "od6",
-  callback: function(err, spreadsheet) {
-    if(err) throw err;
-    run(spreadsheet);
-  }
+  callback: run
 });
 
-function run(spreadsheet) {
-  //get all cells
-  spreadsheet.get(function(err, rows, info) {
+function run(err, spreadsheet) {
+  if(err) throw err;
+  //recieve all cells
+  spreadsheet.recieve(function(err, rows, info) {
     if(err) throw err;
     console.log("Found rows:", rows);
   });

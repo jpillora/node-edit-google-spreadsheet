@@ -9,13 +9,10 @@ Spreadsheet.create({
   worksheetName: 'Sheet1',
   // spreadsheetId: 'ttFmrFPIipJimDQYSFyhwTg',
   // worksheetId: "od6",
-  callback: function(err, spreadsheet) {
-    if(err) throw err;
-    run(spreadsheet);
-  }
+  callback: run
 });
 
-function run(spreadsheet) {
+function run(err, spreadsheet) {
   //insert 'hello!' at E3
   spreadsheet.add({ 3: { 5: "hello!" } });
 

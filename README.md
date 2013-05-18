@@ -1,6 +1,6 @@
 ## Node - Edit Google Spreadsheet
 
-Currently, there are about 3 different node modules which allow you to read data off Google Spreadsheets, though none with a good write API. Enter `edit-google-spreadsheet`. A simple API for reading and editting Google Spreadsheets.
+Currently, there are about 3 different node modules which allow you to read data off Google Spreadsheets, though none with a good write API. Enter `edit-google-spreadsheet`. A simple API for reading and updating Google Spreadsheets.
 
 *Warning: There have been API changes since last release. See below.*
 
@@ -22,10 +22,7 @@ Create sheet:
     password: '...',
     spreadsheetName: 'node-edit-spreadsheet',
     worksheetName: 'Sheet1',
-    callback: function(err, spreadsheet) {
-      if(err) throw err;
-      sheetReady(spreadsheet);
-    }
+    callback: sheetReady
   });
   
 ```
@@ -35,11 +32,12 @@ Create sheet:
 Update sheet:
 
 ``` js
-  function sheetReady(spreadsheet) {
+  function sheetReady(err, spreadsheet) {
+    if(err) throw err;
   
     spreadsheet.add({ 3: { 5: "hello!" } });
   
-    spreadsheet.put(function(err) {
+    spreadsheet.send(function(err) {
       if(err) throw err;
       console.log("Updated Cell at row 3, column 5 to 'hello!'");
     });
@@ -49,9 +47,10 @@ Update sheet:
 Read sheet:
 
 ``` js
-  function sheetReady(spreadsheet) {
+  function sheetReady(err, spreadsheet) {
+    if(err) throw err;
   
-    spreadsheet.get(function(err, rows) {
+    spreadsheet.recieve(function(err, rows) {
       if(err) throw err;
       console.log("Found rows:", rows);
       // Found rows: { '3': { '5': 'hello!' } }
@@ -95,28 +94,28 @@ spreadsheet.add({
   3: {
     4: { name: "a", val: 42 },
     5: { name: "b", val: 21 },
-    6: "={{ a }}+{{ b }}"      //forumla adding row3,col4 with row3,col5 => '=C3+C4'
+    6: "={{ a }}+{{ b }}"      //forumla adding row3,col4 with row3,col5 => '=D3+E3'
   }
 });
 ```
-*Note: cell `a` and `b` are looked up on `put()`*
+*Note: cell `a` and `b` are looked up on `send()`*
 
 
 #### API
 
-#####spreadsheet.`add( obj | array )`
+##### spreadsheet.`add( obj | array )`
 Add cells to the batch. See examples.
 
-#####spreadsheet.`put( callback )`
-Sends off the batch of `add`ed cells. Clears all cells once complete. Callback has signature: `funciton(err, result) {}`.
+##### spreadsheet.`send( callback( err, result ) )`
+Sends off the batch of `add()`ed cells. Clears all cells once complete.
 
-#####spreadsheet.`get( callback , rows , info )`
-Retrieves the entire spreadsheet. The `rows` object returned is in the same format as the cells you `put()`. The `info` object looks like `{ totalRows: 1, totalCells: 1, lastRow: 3, nextRow: 4 }`.
+##### spreadsheet.`recieve( callback( err , rows , info ) )`
+Recieves the entire spreadsheet. The `rows` object returned is in the same object format as the cells you `add()`, so `add(rows)` will be valid. The `info` object looks like `{ totalRows: 1, totalCells: 1, lastRow: 3, nextRow: 4 }`.
 
 #### Options
 
 ##### debug
-If truthy, will display colourful console logs outputing current actions
+If `true`, will display colourful console logs outputing current actions
 
 ##### username password
 Google account - *Be careful about committing these to public repos*
