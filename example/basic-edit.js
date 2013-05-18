@@ -16,8 +16,9 @@ Spreadsheet.create({
   username: creds.username,
   password: creds.password,
   //retrieve by name in progress...
-  spreadsheetName: '...',
-  worksheetName: '...',
+  spreadsheetId: 'ttFmrFPIipJimDQYSFyhwTg',
+  // spreadsheetName: 'node-edit-spreadsheet',
+  worksheetName: 'Sheet1',
   callback: function(err, spreadsheet) {
     if(err) throw err;
     sheetReady(spreadsheet);
@@ -31,4 +32,11 @@ function sheetReady(spreadsheet) {
     if(err) throw err;
     console.log("Updated Cell at row 3, column 5 to 'hello!'");
   });
+
+  spreadsheet.getRows(showRows);
 }
+
+function showRows(err, rows) {
+  console.log("rows", rows);
+}
+
