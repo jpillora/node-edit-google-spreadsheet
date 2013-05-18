@@ -30,7 +30,7 @@ Create sheet:
   
 ```
 
-*Note: Using the options 'spreadsheetName' and 'worksheetName' will cause lookups for 'spreadsheetId' and 'worksheetId'. Use 'spreadsheetId' and 'worksheetId' for improved performance.*
+*Note: Using the options `spreadsheetName` and `worksheetName` will cause lookups for `spreadsheetId` and `worksheetId`. Use `spreadsheetId` and `worksheetId` for improved performance.*
 
 Update sheet:
 
@@ -54,7 +54,6 @@ Read sheet:
     spreadsheet.get(function(err, rows) {
       if(err) throw err;
       console.log("Found rows:", rows);
-
       // Found rows: { '3': { '5': 'hello!' } }
     });
 
@@ -120,7 +119,7 @@ Retrieves the entire spreadsheet. The `rows` object returned is in the same form
 If truthy, will display colourful console logs outputing current actions
 
 ##### username password
-Google account - Be careful about committing these to public repos
+Google account - *Be careful about committing these to public repos*
 
 ##### spreadSheetName spreadsheetId
 The spreadsheet you wish to edit. Either the Name or Id is required.
@@ -139,7 +138,7 @@ Function returning the authenticated Spreadsheet instance
 #### FAQ
 
 * Q: How do I append rows to my spreadsheet ?
-* A: Using the `info` object returned from `get()`, one could always at the `nextRow`, thereby appending to the spreadsheet.
+* A: Using the `info` object returned from `get()`, one could always begin `add()`ing at the `nextRow`, thereby appending to the spreadsheet.
 
 #### Credits
 
