@@ -2,7 +2,7 @@ var Spreadsheet = require('../');
 var creds = require('./eg-cred-loader');
 
 Spreadsheet.create({
-  debug: false,
+  debug: true,
   username: creds.username,
   password: creds.password,
   spreadsheetName: 'node-edit-spreadsheet',

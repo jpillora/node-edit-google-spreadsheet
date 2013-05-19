@@ -133,11 +133,12 @@ Function returning the authenticated Spreadsheet instance
 
 * OAuth
 * Create New Spreadsheets
+* Read specific range of cells
 
 #### FAQ
 
 * Q: How do I append rows to my spreadsheet ?
-* A: Using the `info` object returned from `get()`, one could always begin `add()`ing at the `nextRow`, thereby appending to the spreadsheet.
+* A: Using the `info` object returned from `recieve()`, one could always begin `add()`ing at the `nextRow`, thereby appending to the spreadsheet.
 
 #### Credits
 
