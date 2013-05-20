@@ -16,7 +16,7 @@ function run(err, spreadsheet) {
   //insert 'hello!' at E3
   spreadsheet.add({ 3: { 5: "hello!" } });
 
-  spreadsheet.put(function(err) {
+  spreadsheet.send(function(err) {
     if(err) throw err;
     console.log("Updated Cell at row 3, column 5 to 'hello!'");
   });

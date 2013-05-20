@@ -21,7 +21,7 @@ function run(err, spreadsheet) {
     }
   });
 
-  spreadsheet.put(function(err) {
+  spreadsheet.send(function(err) {
     if(err) throw err;
     console.log("Cells updated");
   });
