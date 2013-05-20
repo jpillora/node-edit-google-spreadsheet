@@ -106,7 +106,7 @@ spreadsheet.add({
 ##### spreadsheet.`add( obj | array )`
 Add cells to the batch. See examples.
 
-##### spreadsheet.`send( callback( err, result ) )`
+##### spreadsheet.`send( callback( err ) )`
 Sends off the batch of `add()`ed cells. Clears all cells once complete.
 
 ##### spreadsheet.`receive( callback( err , rows , info ) )`
