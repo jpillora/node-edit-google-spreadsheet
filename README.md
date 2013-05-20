@@ -24,7 +24,7 @@ Create sheet:
     worksheetName: 'Sheet1',
     callback: sheetReady
   });
-  
+
 ```
 
 *Note: Using the options `spreadsheetName` and `worksheetName` will cause lookups for `spreadsheetId` and `worksheetId`. Use `spreadsheetId` and `worksheetId` for improved performance.*
@@ -34,9 +34,9 @@ Update sheet:
 ``` js
   function sheetReady(err, spreadsheet) {
     if(err) throw err;
-  
+
     spreadsheet.add({ 3: { 5: "hello!" } });
-  
+
     spreadsheet.send(function(err) {
       if(err) throw err;
       console.log("Updated Cell at row 3, column 5 to 'hello!'");
@@ -49,8 +49,8 @@ Read sheet:
 ``` js
   function sheetReady(err, spreadsheet) {
     if(err) throw err;
-  
-    spreadsheet.recieve(function(err, rows) {
+
+    spreadsheet.receive(function(err, rows) {
       if(err) throw err;
       console.log("Found rows:", rows);
       // Found rows: { '3': { '5': 'hello!' } }
@@ -109,7 +109,7 @@ Add cells to the batch. See examples.
 ##### spreadsheet.`send( callback( err, result ) )`
 Sends off the batch of `add()`ed cells. Clears all cells once complete.
 
-##### spreadsheet.`recieve( callback( err , rows , info ) )`
+##### spreadsheet.`receive( callback( err , rows , info ) )`
 Recieves the entire spreadsheet. The `rows` object returned is in the same object format as the cells you `add()`, so `add(rows)` will be valid. The `info` object looks like `{ totalRows: 1, totalCells: 1, lastRow: 3, nextRow: 4 }`.
 
 #### Options
@@ -138,7 +138,7 @@ Function returning the authenticated Spreadsheet instance
 #### FAQ
 
 * Q: How do I append rows to my spreadsheet ?
-* A: Using the `info` object returned from `recieve()`, one could always begin `add()`ing at the `nextRow`, thereby appending to the spreadsheet.
+* A: Using the `info` object returned from `receive()`, one could always begin `add()`ing at the `nextRow`, thereby appending to the spreadsheet.
 
 #### Credits
 

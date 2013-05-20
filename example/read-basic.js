@@ -14,8 +14,8 @@ Spreadsheet.create({
 
 function run(err, spreadsheet) {
   if(err) throw err;
-  //recieve all cells
-  spreadsheet.recieve(function(err, rows, info) {
+  //receive all cells
+  spreadsheet.receive(function(err, rows, info) {
     if(err) throw err;
     console.log("Found rows:", rows);
   });
