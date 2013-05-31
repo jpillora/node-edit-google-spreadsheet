@@ -18,5 +18,6 @@ function run(err, spreadsheet) {
   spreadsheet.receive(function(err, rows, info) {
     if(err) throw err;
     console.log("Found rows:", rows);
+    console.log("With info:", info);
   });
 }
