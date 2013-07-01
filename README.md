@@ -11,21 +11,44 @@ npm install edit-google-spreadsheet
 
 #### Basic Usage
 
-Create sheet:
+Create sheet with client login:
 
 ``` js
   var Spreadsheet = require('edit-google-spreadsheet');
 
   Spreadsheet.create({
     debug: true,
-    username: '...',
-    password: '...',
+    auth : {
+        username: '...',
+        password: '...'
+    },
     spreadsheetName: 'node-edit-spreadsheet',
     worksheetName: 'Sheet1',
     callback: sheetReady
   });
 
 ```
+
+Create sheet with OAuth:
+
+``` js
+  var Spreadsheet = require('edit-google-spreadsheet');
+
+  Spreadsheet.create({
+    debug: true,
+    auth : {
+        email: 'some-id@developer.gserviceaccount.com',
+        keyFile: 'private-key.pem',
+        scopes: ['https://spreadsheets.google.com/feeds'],    
+    },
+    spreadsheetName: 'node-edit-spreadsheet',
+    worksheetName: 'Sheet1',
+    callback: sheetReady
+  });
+```
+read more about OAuth parameters: https://github.com/extrabacon/google-oauth-jwt
+
+*Note: If you use OAuth then folders and files must be shared with the service account email address.
 
 *Note: Using the options `spreadsheetName` and `worksheetName` will cause lookups for `spreadsheetId` and `worksheetId`. Use `spreadsheetId` and `worksheetId` for improved performance.*
 
@@ -131,7 +154,6 @@ Function returning the authenticated Spreadsheet instance
 
 #### Todo
 
-* OAuth
 * Create New Spreadsheets
 * Read specific range of cells
 
