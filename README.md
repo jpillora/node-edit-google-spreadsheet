@@ -2,8 +2,6 @@
 
 Currently, there are about 3 different node modules which allow you to read data off Google Spreadsheets, though none with a good write API. Enter `edit-google-spreadsheet`. A simple API for reading and updating Google Spreadsheets.
 
-*Warning: There have been API changes since last release. See below.*
-
 #### Install
 ```
 npm install edit-google-spreadsheet
@@ -18,16 +16,16 @@ Create sheet with client login:
 
   Spreadsheet.create({
     debug: true,
-    auth : {
-        username: '...',
-        password: '...'
-    },
+    username: '...',
+    password: '...',
     spreadsheetName: 'node-edit-spreadsheet',
     worksheetName: 'Sheet1',
     callback: sheetReady
   });
 
 ```
+
+*Note: Using the options `spreadsheetName` and `worksheetName` will cause lookups for `spreadsheetId` and `worksheetId`. Use `spreadsheetId` and `worksheetId` for improved performance.*
 
 Create sheet with OAuth:
 
@@ -36,21 +34,15 @@ Create sheet with OAuth:
 
   Spreadsheet.create({
     debug: true,
-    auth : {
-        email: 'some-id@developer.gserviceaccount.com',
-        keyFile: 'private-key.pem',
-        scopes: ['https://spreadsheets.google.com/feeds'],    
+    oauth : {
+      email: 'some-id@developer.gserviceaccount.com',
+      keyFile: 'private-key.pem'
     },
     spreadsheetName: 'node-edit-spreadsheet',
     worksheetName: 'Sheet1',
     callback: sheetReady
   });
 ```
-read more about OAuth parameters: https://github.com/extrabacon/google-oauth-jwt
-
-*Note: If you use OAuth then folders and files must be shared with the service account email address.
-
-*Note: Using the options `spreadsheetName` and `worksheetName` will cause lookups for `spreadsheetId` and `worksheetId`. Use `spreadsheetId` and `worksheetId` for improved performance.*
 
 Update sheet:
 
@@ -73,7 +65,7 @@ Read sheet:
   function sheetReady(err, spreadsheet) {
     if(err) throw err;
 
-    spreadsheet.receive(function(err, rows) {
+    spreadsheet.receive(function(err, rows, info) {
       if(err) throw err;
       console.log("Found rows:", rows);
       // Found rows: { '3': { '5': 'hello!' } }
@@ -82,7 +74,7 @@ Read sheet:
   }
 ```
 
-#### More Examples
+#### More `add` Examples
 
 Batch edit:
 
@@ -111,18 +103,17 @@ spreadsheet.add({
 });
 ```
 
-Named cell references:
+Formula building with named cell references:
 ``` js
 spreadsheet.add({
   3: {
-    4: { name: "a", val: 42 },
-    5: { name: "b", val: 21 },
+    4: { name: "a", val: 42 }, //'42' though tagged as "a"
+    5: { name: "b", val: 21 }, //'21' though tagged as "b"
     6: "={{ a }}+{{ b }}"      //forumla adding row3,col4 with row3,col5 => '=D3+E3'
   }
 });
 ```
 *Note: cell `a` and `b` are looked up on `send()`*
-
 
 #### API
 
@@ -133,29 +124,50 @@ Add cells to the batch. See examples.
 Sends off the batch of `add()`ed cells. Clears all cells once complete.
 
 ##### spreadsheet.`receive( callback( err , rows , info ) )`
-Recieves the entire spreadsheet. The `rows` object returned is in the same object format as the cells you `add()`, so `add(rows)` will be valid. The `info` object looks like `{ totalRows: 1, totalCells: 1, lastRow: 3, nextRow: 4 }`.
+Recieves the entire spreadsheet. The `rows` object is an object in the same format as the cells you `add()`, so `add(rows)` will be valid. The `info` object looks like:
+
+```
+{
+  spreadsheetId: 'ttFmrFPIipJimDQYSFyhwTg',
+  worksheetId: 'od6',
+  worksheetTitle: 'Sheet1',
+  worksheetUpdated: '2013-05-31T11:38:11.116Z',
+  authors: [ { name: 'jpillora', email: 'dev@jpillora.com' } ],
+  totalCells: 1,
+  totalRows: 1,
+  lastRow: 3,
+  nextRow: 4
+}
+```
 
 #### Options
 
-##### debug
-If `true`, will display colourful console logs outputing current actions
+##### `callback`
+Function returning the authenticated Spreadsheet instance.
 
-##### username password
-Google account - *Be careful about committing these to public repos*
+##### `debug`
+If `true`, will display colourful console logs outputing current actions.
 
-##### spreadSheetName spreadsheetId
+##### `username` `password`
+Google account - *Be careful about committing these to public repos*.
+
+##### `oauth`
+OAuth configuration object. See [google-oauth-jwt](https://github.com/extrabacon/google-oauth-jwt). *By default `oauth.scopes` is set to `['https://spreadsheets.google.com/feeds']` (`http` if not `useHTTPS`*
+
+##### `spreadSheetName` `spreadsheetId`
 The spreadsheet you wish to edit. Either the Name or Id is required.
 
-##### workSheetName worksheetId
+##### `workSheetName` `worksheetId`
 The worksheet you wish to edit. Either the Name or Id is required.
 
-##### callback
-Function returning the authenticated Spreadsheet instance
+##### `useHTTPS`
+Whether to use `https` when connecting to Google (default: `true`)
 
 #### Todo
 
 * Create New Spreadsheets
 * Read specific range of cells
+* Option to cache auth token in file
 
 #### FAQ
 

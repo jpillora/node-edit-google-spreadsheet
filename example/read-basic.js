@@ -1,5 +1,5 @@
 var Spreadsheet = require('../');
-var creds = require('./eg-cred-loader');
+var creds = require('./cred-loader');
 
 Spreadsheet.create({
   debug: true,
