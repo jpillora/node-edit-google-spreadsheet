@@ -48,6 +48,8 @@ Create sheet with OAuth:
 ```
 read more about OAuth parameters: https://github.com/extrabacon/google-oauth-jwt
 
+*Note: If you use OAuth then folders and files must be shared with the service account email address.
+
 *Note: Using the options `spreadsheetName` and `worksheetName` will cause lookups for `spreadsheetId` and `worksheetId`. Use `spreadsheetId` and `worksheetId` for improved performance.*
 
 Update sheet:
