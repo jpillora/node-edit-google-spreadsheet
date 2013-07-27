@@ -134,8 +134,11 @@ spreadsheet.add({
 ##### spreadsheet.`add( obj | array )`
 Add cells to the batch. See examples.
 
-##### spreadsheet.`send( callback( err ) )`
+##### spreadsheet.`send( callback( err ), [options] )`
 Sends off the batch of `add()`ed cells. Clears all cells once complete.
+#### Options
+##### `autoSize`
+Increase the page size (rows and columns) in order to content fits on it.
 
 ##### spreadsheet.`receive( callback( err , rows , info ) )`
 Recieves the entire spreadsheet. The `rows` object is an object in the same format as the cells you `add()`, so `add(rows)` will be valid. The `info` object looks like:
