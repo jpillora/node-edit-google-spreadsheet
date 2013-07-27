@@ -73,6 +73,20 @@ Read sheet:
 
   }
 ```
+#### Metadata
+You can get/update the worksheet metadata:
+``` js
+spreadsheet.getMetadata(function(err, metadata){
+  metadata.getRaw();
+  metadata.get(prop);
+  metadata.set(prop, value);
+  metadata.save(function(err){});
+});
+```
+Available property names are:
+- title: the worksheet name. Change this property to rename the worksheet
+- rowCount: total rows. Change this property to set the total rows
+- colCount: total columns. Change this property to set the total columns
 
 #### More `add` Examples
 
