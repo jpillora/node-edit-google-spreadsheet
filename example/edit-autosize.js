@@ -14,11 +14,11 @@ Spreadsheet.create({
 
 function run(err, spreadsheet) {
   if(err) throw err;
-  //insert 'hello!' at E3
-  spreadsheet.add({ 3: { 5: "hello!" } });
+  
+  spreadsheet.add({ 300: { 50: "hello!" } });
 
-  spreadsheet.send(function(err) {
+  spreadsheet.send({ autoSize: true }, function(err) {
     if(err) throw err;
-    console.log("Updated Cell at row 3, column 5 to 'hello!'");
+    console.log("Resized then updated Cell at row 300, column 50 to 'hello!'");
   });
 }

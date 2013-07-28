@@ -1,5 +1,6 @@
 var Spreadsheet = require('../');
 var creds = require('./cred-loader');
+var util = require('util');
 
 Spreadsheet.create({
   debug: true,
@@ -14,11 +15,12 @@ Spreadsheet.create({
 
 function run(err, spreadsheet) {
   if(err) throw err;
-  //insert 'hello!' at E3
-  spreadsheet.add({ 3: { 5: "hello!" } });
-
-  spreadsheet.send(function(err) {
+  
+  spreadsheet.metadata(function(err, metadata){
     if(err) throw err;
-    console.log("Updated Cell at row 3, column 5 to 'hello!'");
+
+    console.log(metadata);
+    // { title: 'Sheet1', rowCount: '100', colCount: '20',
+    //   updated: Sun Jul 28 2013 12:07:31 GMT+1000 (EST) }
   });
 }

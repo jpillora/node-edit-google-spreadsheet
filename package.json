@@ -1,6 +1,6 @@
 {
   "name": "edit-google-spreadsheet",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "dependencies": {
     "colors": "~0.6.0-1",
     "googleclientlogin": "~0.2.6",

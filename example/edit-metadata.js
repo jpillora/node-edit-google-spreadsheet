@@ -1,5 +1,6 @@
 var Spreadsheet = require('../');
 var creds = require('./cred-loader');
+var util = require('util');
 
 Spreadsheet.create({
   debug: true,
@@ -7,16 +8,20 @@ Spreadsheet.create({
   password: creds.password,
   spreadsheetName: 'node-edit-spreadsheet',
   worksheetName: 'Sheet1',
-  // spreadsheetId: 'ttFmrFPIipJimDQYSFyhwTg',
-  // worksheetId: "od6",
+  // spreadsheetId: 'tI1mkRABSRt3tQX3b-CRPbw',
+  // worksheetId: 'od6',
   callback: run
 });
 
 function run(err, spreadsheet) {
-  //Change the worksheet name
-  spreadsheet.addVal('value', 200, 50);
-  spreadsheet.send(function(err){
-    console.log(err);
-  }, {autoSize: true});
-
+  if(err) throw err;
+  
+  spreadsheet.metadata({
+    title: 'Sheet1',
+    rowCount: 5,
+    colCount: 5
+  }, function(err, metadata){
+    if(err) throw err;
+    console.log(metadata);
+  });
 }

@@ -74,19 +74,39 @@ Read sheet:
   }
 ```
 #### Metadata
-You can get/update the worksheet metadata:
+
+Get metadata
+
 ``` js
-spreadsheet.getMetadata(function(err, metadata){
-  metadata.getRaw();
-  metadata.get(prop);
-  metadata.set(prop, value);
-  metadata.save(function(err){});
-});
+  function sheetReady(err, spreadsheet) {
+    if(err) throw err;
+    
+    spreadsheet.metadata(function(err, metadata){
+      if(err) throw err;
+      console.log(metadata);
+      // { title: 'Sheet3', rowCount: '100', colCount: '20', updated: [Date] }
+    });
+  }
 ```
-Available property names are:
-- title: the worksheet name. Change this property to rename the worksheet
-- rowCount: total rows. Change this property to set the total rows
-- colCount: total columns. Change this property to set the total columns
+
+Set metadata
+
+``` js
+  function sheetReady(err, spreadsheet) {
+    if(err) throw err;
+    
+    spreadsheet.metadata({
+      title: 'Sheet3'
+      rowCount: '100',
+      colCount: '20'
+    }, function(err, metadata){
+      if(err) throw err;
+      console.log(metadata);
+    });
+  }
+```
+
+***WARNING: all cells outside the range of the new size will be silently deleted***
 
 #### More `add` Examples
 
@@ -131,14 +151,19 @@ spreadsheet.add({
 
 #### API
 
+
+##### `Spreadsheet.create( options )`
+
+See [Options](#Options) below
+
 ##### spreadsheet.`add( obj | array )`
 Add cells to the batch. See examples.
 
-##### spreadsheet.`send( callback( err ), [options] )`
+##### spreadsheet.`send( [options,] callback( err ) )`
 Sends off the batch of `add()`ed cells. Clears all cells once complete.
-#### Options
-##### `autoSize`
-Increase the page size (rows and columns) in order to content fits on it.
+
+ * `options.autoSize`
+Increase the page size (rows and columns) in order to content fits on it (default `false`).
 
 ##### spreadsheet.`receive( callback( err , rows , info ) )`
 Recieves the entire spreadsheet. The `rows` object is an object in the same format as the cells you `add()`, so `add(rows)` will be valid. The `info` object looks like:
@@ -157,6 +182,13 @@ Recieves the entire spreadsheet. The `rows` object is an object in the same form
 }
 ```
 
+##### spreadsheet.`metadata( [data, ] callback )`
+
+Get and set metadata
+
+*Note: when setting new metadata, if `rowCount` and/or `colCount` is left out,
+an extra request will be made to retrieve the missing data.*
+
 #### Options
 
 ##### `callback`
@@ -169,7 +201,7 @@ If `true`, will display colourful console logs outputing current actions.
 Google account - *Be careful about committing these to public repos*.
 
 ##### `oauth`
-OAuth configuration object. See [google-oauth-jwt](https://github.com/extrabacon/google-oauth-jwt). *By default `oauth.scopes` is set to `['https://spreadsheets.google.com/feeds']` (`http` if not `useHTTPS`*
+OAuth configuration object. See [google-oauth-jwt](https://github.com/extrabacon/google-oauth-jwt#specifying-options). *By default `oauth.scopes` is set to `['https://spreadsheets.google.com/feeds']` (`https` if `useHTTPS`)*
 
 ##### `spreadSheetName` `spreadsheetId`
 The spreadsheet you wish to edit. Either the Name or Id is required.
@@ -194,3 +226,9 @@ Whether to use `https` when connecting to Google (default: `true`)
 #### Credits
 
 Thanks to `googleclientlogin` for easy Google API ClientLogin Tokens
+
+#### References
+
+* https://developers.google.com/google-apps/spreadsheets/
+* https://developers.google.com/google-apps/documents-list/
+
