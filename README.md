@@ -96,9 +96,9 @@ Set metadata
     if(err) throw err;
     
     spreadsheet.metadata({
-      title: 'Sheet3'
-      rowCount: '100',
-      colCount: '20'
+      title: 'Sheet2'
+      rowCount: 100,
+      colCount: 20
     }, function(err, metadata){
       if(err) throw err;
       console.log(metadata);
@@ -162,8 +162,7 @@ Add cells to the batch. See examples.
 ##### spreadsheet.`send( [options,] callback( err ) )`
 Sends off the batch of `add()`ed cells. Clears all cells once complete.
 
- * `options.autoSize`
-Increase the page size (rows and columns) in order to content fits on it (default `false`).
+`options.autoSize` When required, increase the worksheet size (rows and columns) in order to fit the batch (default `false`).
 
 ##### spreadsheet.`receive( callback( err , rows , info ) )`
 Recieves the entire spreadsheet. The `rows` object is an object in the same format as the cells you `add()`, so `add(rows)` will be valid. The `info` object looks like:
