@@ -8,5 +8,6 @@
     "request": "~2.21.0",
     "google-oauth-jwt": "0.0.4",
     "async": "~0.2.9"
-  }
+  },
+  "repository":"git://github.com/jpillora/node-edit-google-spreadsheet.git"
 }
