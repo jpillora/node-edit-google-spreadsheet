@@ -1,6 +1,8 @@
 ## Node - Edit Google Spreadsheet
 
-Currently, there are about 3 different node modules which allow you to read data off Google Spreadsheets, though none with a good write API. Enter `edit-google-spreadsheet`. A simple API for reading and updating Google Spreadsheets.
+> A simple API for reading and writing to Google Spreadsheets
+
+[![NPM version](https://nodei.co/npm/edit-google-spreadsheet.png?compact=true)](https://npmjs.org/package/edit-google-spreadsheet)
 
 #### Install
 ```
@@ -154,7 +156,7 @@ spreadsheet.add({
 
 ##### `Spreadsheet.create( options )`
 
-See [Options](#Options) below
+See [Options](https://github.com/jpillora/node-edit-google-spreadsheet#options) below
 
 ##### spreadsheet.`add( obj | array )`
 Add cells to the batch. See examples.
