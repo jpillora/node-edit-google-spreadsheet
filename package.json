@@ -6,6 +6,8 @@
     "googleclientlogin": "~0.2.6",
     "lodash": "~1.2.1",
     "request": "~2.21.0",
-    "google-oauth-jwt": "0.0.4"
-  }
+    "google-oauth-jwt": "0.0.4",
+    "async": "~0.2.9"
+  },
+  "repository":"git://github.com/jpillora/node-edit-google-spreadsheet.git"
 }
