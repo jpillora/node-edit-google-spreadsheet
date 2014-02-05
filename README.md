@@ -46,6 +46,23 @@ Create sheet with OAuth:
   });
 ```
 
+Create sheet with an Access Token:
+
+``` js
+  var Spreadsheet = require('edit-google-spreadsheet');
+
+  Spreadsheet.create({
+    debug: true,
+    accessToken : {
+        type: 'Bearer',
+        token: 'some_oauth_generated_access_token'
+    },
+    spreadsheetName: 'node-edit-spreadsheet',
+    worksheetName: 'Sheet1',
+    callback: sheetReady
+  });
+```
+
 Update sheet:
 
 ``` js
