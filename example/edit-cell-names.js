@@ -8,9 +8,8 @@ Spreadsheet.create({
   spreadsheetName: 'node-edit-spreadsheet',
   worksheetName: 'Sheet1',
   // spreadsheetId: 'ttFmrFPIipJimDQYSFyhwTg',
-  // worksheetId: "od6",
-  callback: run
-});
+  // worksheetId: "od6"
+}, run);
 
 function run(err, spreadsheet) {
   spreadsheet.add({

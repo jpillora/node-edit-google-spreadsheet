@@ -8,14 +8,14 @@ Spreadsheet.create({
   spreadsheetName: 'node-edit-spreadsheet',
   worksheetName: 'Sheet1',
   // spreadsheetId: 'ttFmrFPIipJimDQYSFyhwTg',
-  // worksheetId: "od6",
-  callback: run
-});
+  // worksheetId: "od6"
+}, run);
 
 function run(err, spreadsheet) {
   if(err) throw err;
+
   //receive all cells
-  spreadsheet.receive(function(err, rows, info) {
+  spreadsheet.receive({getValues:true},function(err, rows, info) {
     if(err) throw err;
     console.log("Found rows:", rows);
     console.log("With info:", info);

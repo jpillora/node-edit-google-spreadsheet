@@ -11,57 +11,36 @@ npm install edit-google-spreadsheet
 
 #### Basic Usage
 
-Create sheet with client login:
+Load a spreadsheet:
 
 ``` js
   var Spreadsheet = require('edit-google-spreadsheet');
 
-  Spreadsheet.create({
+  Spreadsheet.load({
     debug: true,
-    username: '...',
-    password: '...',
     spreadsheetName: 'node-edit-spreadsheet',
     worksheetName: 'Sheet1',
-    callback: sheetReady
-  });
+    // Choose from 1 of the 3 authentication methods:
+    //    1. Username and Password
+    username: 'my-name@google.email.com',
+    password: 'my-5uper-t0p-secret-password',
+    // OR 2. OAuth
+    oauth : {
+      email: 'my-name@google.email.com',
+      keyFile: 'my-private-key.pem'
+    },
+    // OR 3. Token
+    accessToken : {
+      type: 'Bearer',
+      token: 'my-generated-token'
+    }
 
+  }, function sheetReady(err, spreadsheet) {
+    //use speadsheet!
+  });
 ```
 
 *Note: Using the options `spreadsheetName` and `worksheetName` will cause lookups for `spreadsheetId` and `worksheetId`. Use `spreadsheetId` and `worksheetId` for improved performance.*
-
-Create sheet with OAuth:
-
-``` js
-  var Spreadsheet = require('edit-google-spreadsheet');
-
-  Spreadsheet.create({
-    debug: true,
-    oauth : {
-      email: 'some-id@developer.gserviceaccount.com',
-      keyFile: 'private-key.pem'
-    },
-    spreadsheetName: 'node-edit-spreadsheet',
-    worksheetName: 'Sheet1',
-    callback: sheetReady
-  });
-```
-
-Create sheet with an Access Token:
-
-``` js
-  var Spreadsheet = require('edit-google-spreadsheet');
-
-  Spreadsheet.create({
-    debug: true,
-    accessToken : {
-        type: 'Bearer',
-        token: 'some_oauth_generated_access_token'
-    },
-    spreadsheetName: 'node-edit-spreadsheet',
-    worksheetName: 'Sheet1',
-    callback: sheetReady
-  });
-```
 
 Update sheet:
 
@@ -171,7 +150,7 @@ spreadsheet.add({
 #### API
 
 
-##### `Spreadsheet.create( options )`
+##### `Spreadsheet.load( options, callback )`
 
 See [Options](https://github.com/jpillora/node-edit-google-spreadsheet#options) below
 
@@ -183,7 +162,7 @@ Sends off the batch of `add()`ed cells. Clears all cells once complete.
 
 `options.autoSize` When required, increase the worksheet size (rows and columns) in order to fit the batch (default `false`).
 
-##### spreadsheet.`receive( callback( err , rows , info ) )`
+##### spreadsheet.`receive( [options,] callback( err , rows , info ) )`
 Recieves the entire spreadsheet. The `rows` object is an object in the same format as the cells you `add()`, so `add(rows)` will be valid. The `info` object looks like:
 
 ```
@@ -200,6 +179,8 @@ Recieves the entire spreadsheet. The `rows` object is an object in the same form
 }
 ```
 
+`options.getValues` Always get the values (results) of forumla cells.
+
 ##### spreadsheet.`metadata( [data, ] callback )`
 
 Get and set metadata
@@ -207,7 +188,11 @@ Get and set metadata
 *Note: when setting new metadata, if `rowCount` and/or `colCount` is left out,
 an extra request will be made to retrieve the missing data.*
 
-#### Options
+##### spreadsheet.`raw`
+
+The raw data recieved from Google when enumerating the spreedsheet and worksheet lists, *which are triggered when searching for IDs*. In order to see this array of all spreadsheets (`raw.spreadsheets`) the `spreadsheetName` option must be used. Similarly for worksheets (`raw.worksheets`), the `worksheetName` options must be used.
+
+#### Optionsc
 
 ##### `callback`
 Function returning the authenticated Spreadsheet instance.
@@ -221,10 +206,13 @@ Google account - *Be careful about committing these to public repos*.
 ##### `oauth`
 OAuth configuration object. See [google-oauth-jwt](https://github.com/extrabacon/google-oauth-jwt#specifying-options). *By default `oauth.scopes` is set to `['https://spreadsheets.google.com/feeds']` (`https` if `useHTTPS`)*
 
-##### `spreadSheetName` `spreadsheetId`
+##### `accessToken`
+Reuse a generated access `token` of the given `type`
+
+##### `spreadsheetName` `spreadsheetId`
 The spreadsheet you wish to edit. Either the Name or Id is required.
 
-##### `workSheetName` `worksheetId`
+##### `worksheetName` `worksheetId`
 The worksheet you wish to edit. Either the Name or Id is required.
 
 ##### `useHTTPS`
