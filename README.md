@@ -1,6 +1,6 @@
-## Node - Edit Google Spreadsheet
+## Edit Google Spreadsheet
 
-> A simple API for reading and writing to Google Spreadsheets
+> A simple API for reading and writing Google Spreadsheets in Node.js
 
 [![NPM version](https://nodei.co/npm/edit-google-spreadsheet.png?compact=true)](https://npmjs.org/package/edit-google-spreadsheet)
 
@@ -34,7 +34,6 @@ Load a spreadsheet:
       type: 'Bearer',
       token: 'my-generated-token'
     }
-
   }, function sheetReady(err, spreadsheet) {
     //use speadsheet!
   });
@@ -150,7 +149,7 @@ spreadsheet.add({
 #### API
 
 
-##### `Spreadsheet.load( options, callback )`
+##### `Spreadsheet.load( options, callback( err, spreadsheet ) )`
 
 See [Options](https://github.com/jpillora/node-edit-google-spreadsheet#options) below
 
@@ -207,7 +206,7 @@ Google account - *Be careful about committing these to public repos*.
 OAuth configuration object. See [google-oauth-jwt](https://github.com/extrabacon/google-oauth-jwt#specifying-options). *By default `oauth.scopes` is set to `['https://spreadsheets.google.com/feeds']` (`https` if `useHTTPS`)*
 
 ##### `accessToken`
-Reuse a generated access `token` of the given `type`
+Reuse a generated access `token` of the given `type`. If you set `accessToken` to an object, reauthentications will not work. Instead use a `function accessToken(callback(err, token)) { ... }` function, to allow token generation when required.
 
 ##### `spreadsheetName` `spreadsheetId`
 The spreadsheet you wish to edit. Either the Name or Id is required.
@@ -238,3 +237,29 @@ Thanks to `googleclientlogin` for easy Google API ClientLogin Tokens
 * https://developers.google.com/google-apps/spreadsheets/
 * https://developers.google.com/google-apps/documents-list/
 
+#### Donate
+
+BTC 1AxEWoz121JSC3rV8e9MkaN9GAc5Jxvs4
+
+#### MIT License
+
+Copyright © 2014 Jaime Pillora &lt;dev@jpillora.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
