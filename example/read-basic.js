@@ -12,7 +12,7 @@ Spreadsheet.load({
 }, function run(err, spreadsheet) {
   if(err) throw err;
   //receive all cells
-  spreadsheet.receive({getValues:true},function(err, rows, info) {
+  spreadsheet.receive({getValues:false},function(err, rows, info) {
     if(err) throw err;
     console.log("Found rows:", rows);
     console.log("With info:", info);
