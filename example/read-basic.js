@@ -1,7 +1,7 @@
 var Spreadsheet = require('../');
 var creds = require('./cred-loader');
 
-Spreadsheet.create({
+Spreadsheet.load({
   debug: true,
   username: creds.username,
   password: creds.password,
@@ -9,15 +9,13 @@ Spreadsheet.create({
   worksheetName: 'Sheet1',
   // spreadsheetId: 'ttFmrFPIipJimDQYSFyhwTg',
   // worksheetId: "od6"
-}, run);
-
-function run(err, spreadsheet) {
+}, function run(err, spreadsheet) {
   if(err) throw err;
-
   //receive all cells
   spreadsheet.receive({getValues:true},function(err, rows, info) {
     if(err) throw err;
     console.log("Found rows:", rows);
     console.log("With info:", info);
   });
-}
+});
+

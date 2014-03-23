@@ -2,7 +2,7 @@ var Spreadsheet = require('../');
 var creds = require('./cred-loader');
 var util = require('util');
 
-Spreadsheet.create({
+Spreadsheet.load({
   debug: true,
   username: creds.username,
   password: creds.password,
@@ -10,9 +10,7 @@ Spreadsheet.create({
   worksheetName: 'Sheet1',
   // spreadsheetId: 'tI1mkRABSRt3tQX3b-CRPbw',
   // worksheetId: 'od6'
-}, run);
-
-function run(err, spreadsheet) {
+}, function run(err, spreadsheet) {
   if(err) throw err;
   
   spreadsheet.metadata(function(err, metadata){
@@ -22,4 +20,5 @@ function run(err, spreadsheet) {
     // { title: 'Sheet1', rowCount: '100', colCount: '20',
     //   updated: Sun Jul 28 2013 12:07:31 GMT+1000 (EST) }
   });
-}
+});
+

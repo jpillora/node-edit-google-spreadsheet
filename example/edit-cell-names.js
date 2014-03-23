@@ -1,7 +1,7 @@
 var Spreadsheet = require('../');
 var creds = require('./cred-loader');
 
-Spreadsheet.create({
+Spreadsheet.load({
   debug: true,
   username: creds.username,
   password: creds.password,
@@ -9,9 +9,9 @@ Spreadsheet.create({
   worksheetName: 'Sheet1',
   // spreadsheetId: 'ttFmrFPIipJimDQYSFyhwTg',
   // worksheetId: "od6"
-}, run);
+}, function run(err, spreadsheet) {
+  if(err) throw err;
 
-function run(err, spreadsheet) {
   spreadsheet.add({
     3: {
       4: { name: "a", val: 42 }, //'42' though tagged as "a"
@@ -24,4 +24,5 @@ function run(err, spreadsheet) {
     if(err) throw err;
     console.log("Cells updated");
   });
-}
+});
+
