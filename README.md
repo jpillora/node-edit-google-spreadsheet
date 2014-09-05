@@ -191,7 +191,7 @@ an extra request will be made to retrieve the missing data.*
 
 The raw data recieved from Google when enumerating the spreedsheet and worksheet lists, *which are triggered when searching for IDs*. In order to see this array of all spreadsheets (`raw.spreadsheets`) the `spreadsheetName` option must be used. Similarly for worksheets (`raw.worksheets`), the `worksheetName` options must be used.
 
-#### Optionsc
+#### Options
 
 ##### `callback`
 Function returning the authenticated Spreadsheet instance.
@@ -216,6 +216,9 @@ The worksheet you wish to edit. Either the Name or Id is required.
 
 ##### `useHTTPS`
 Whether to use `https` when connecting to Google (default: `true`)
+
+##### `useCellTextValues`
+Return text values for cells or return values as typed. (default: `true`)
 
 #### Todo
 
