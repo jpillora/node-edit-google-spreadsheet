@@ -2,7 +2,7 @@
 
 > A simple API for reading and writing Google Spreadsheets in Node.js
 
-This module aims to be complete wrapper to the [Google Sheets API version 3.0](https://developers.google.com/google-apps/spreadsheets/). If anything is missing, create an issue, or even better, a pull request.
+This module aims to be a complete wrapper around the [Google Sheets API version 3.0](https://developers.google.com/google-apps/spreadsheets/). If anything is missing, create an issue, or even better, a pull request.
 
 [![NPM version](https://nodei.co/npm/edit-google-spreadsheet.png?compact=true)](https://npmjs.org/package/edit-google-spreadsheet)
 
