@@ -2,6 +2,8 @@
 
 > A simple API for reading and writing Google Spreadsheets in Node.js
 
+This module aims to be complete wrapper to the [Google Sheets API version 3.0](https://developers.google.com/google-apps/spreadsheets/). If anything is missing, create an issue, or even better, a pull request.
+
 [![NPM version](https://nodei.co/npm/edit-google-spreadsheet.png?compact=true)](https://npmjs.org/package/edit-google-spreadsheet)
 
 #### Install
@@ -20,19 +22,29 @@ Load a spreadsheet:
     debug: true,
     spreadsheetName: 'node-edit-spreadsheet',
     worksheetName: 'Sheet1',
-    // Choose from 1 of the 3 authentication methods:
+
+    // Choose from 1 of the 4 authentication methods:
+    
     //    1. Username and Password
     username: 'my-name@google.email.com',
     password: 'my-5uper-t0p-secret-password',
+
     // OR 2. OAuth
     oauth : {
       email: 'my-name@google.email.com',
       keyFile: 'my-private-key.pem'
     },
-    // OR 3. Token
-    accessToken : {
+
+    // OR 3. Static Token
+    accessToken: {
       type: 'Bearer',
       token: 'my-generated-token'
+    },
+
+    // OR 4. Dynamic Token
+    accessToken: function(callback) {
+      //... async stuff ...
+      callback(null, token);
     }
   }, function sheetReady(err, spreadsheet) {
     //use speadsheet!
@@ -159,7 +171,7 @@ Add cells to the batch. See examples.
 ##### spreadsheet.`send( [options,] callback( err ) )`
 Sends off the batch of `add()`ed cells. Clears all cells once complete.
 
-`options.autoSize` When required, increase the worksheet size (rows and columns) in order to fit the batch (default `false`).
+`options.autoSize` When required, increase the worksheet size (rows and columns) in order to fit the batch - *NOTE: When enabled, this will trigger an extra request on every `send()`* (default `false`).
 
 ##### spreadsheet.`receive( [options,] callback( err , rows , info ) )`
 Recieves the entire spreadsheet. The `rows` object is an object in the same format as the cells you `add()`, so `add(rows)` will be valid. The `info` object looks like:
@@ -173,8 +185,7 @@ Recieves the entire spreadsheet. The `rows` object is an object in the same form
   authors: [ { name: 'jpillora', email: 'dev@jpillora.com' } ],
   totalCells: 1,
   totalRows: 1,
-  lastRow: 3,
-  nextRow: 4
+  lastRow: 3
 }
 ```
 
@@ -229,7 +240,7 @@ Return text values for cells or return values as typed. (default: `true`)
 #### FAQ
 
 * Q: How do I append rows to my spreadsheet ?
-* A: Using the `info` object returned from `receive()`, one could always begin `add()`ing at the `nextRow`, thereby appending to the spreadsheet.
+* A: Using the `info` object returned from `receive()`, one could always begin `add()`ing at the `lastRow + 1`, thereby appending to the spreadsheet.
 
 #### Credits
 
@@ -238,7 +249,6 @@ Thanks to `googleclientlogin` for easy Google API ClientLogin Tokens
 #### References
 
 * https://developers.google.com/google-apps/spreadsheets/
-* https://developers.google.com/google-apps/documents-list/
 
 #### Donate
 
@@ -246,7 +256,7 @@ BTC 1AxEWoz121JSC3rV8e9MkaN9GAc5Jxvs4
 
 #### MIT License
 
-Copyright © 2014 Jaime Pillora &lt;dev@jpillora.com&gt;
+Copyright © 2015 Jaime Pillora &lt;dev@jpillora.com&gt;
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
