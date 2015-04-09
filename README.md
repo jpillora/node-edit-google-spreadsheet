@@ -6,6 +6,8 @@ This module aims to be complete wrapper to the [Google Sheets API version 3.0](h
 
 [![NPM version](https://nodei.co/npm/edit-google-spreadsheet.png?compact=true)](https://npmjs.org/package/edit-google-spreadsheet)
 
+[![Dependency Status](https://david-dm.org/jpillora/node-edit-google-spreadsheet.svg?theme=shields.io)](https://david-dm.org/jpillora/node-edit-google-spreadsheet)
+
 #### Install
 ```
 npm install edit-google-spreadsheet
