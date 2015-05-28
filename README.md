@@ -1,5 +1,11 @@
 ## Edit Google Spreadsheet
 
+---
+
+:warning: Google has finally deprecated Client Logins, which means you can no longer authenticate with your email and password. See https://github.com/jpillora/node-edit-google-spreadsheet/issues/72 for updates.
+
+---
+
 > A simple API for reading and writing Google Spreadsheets in Node.js
 
 This module aims to be complete wrapper to the [Google Sheets API version 3.0](https://developers.google.com/google-apps/spreadsheets/). If anything is missing, create an issue, or even better, a pull request.
@@ -25,9 +31,7 @@ Load a spreadsheet:
 
     // Choose from 1 of the 4 authentication methods:
     
-    //    1. Username and Password
-    username: 'my-name@google.email.com',
-    password: 'my-5uper-t0p-secret-password',
+    //    1. Username and Password has been deprecated
 
     // OR 2. OAuth
     oauth : {
