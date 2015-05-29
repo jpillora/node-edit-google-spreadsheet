@@ -33,17 +33,15 @@ var OAuth2Client = google.auth.OAuth2;
 var CLIENT_ID = '';
 var CLIENT_SECRET = '';
 
-// 6. Check if readonly permission is ok, if not change to 'https://www.googleapis.com/auth/drive'
-//    ..Or find the correct scope you need here: https://developers.google.com/drive/web/scopes
+// 6. This scope 'https://spreadsheets.google.com/feeds' provides full access to all Spreadsheets in
+// your Google Drive. Find more scopes here: https://developers.google.com/drive/web/scopes
+// and https://developers.google.com/google-apps/spreadsheets/authorize
+var PERMISSION_SCOPE = 'https://spreadsheets.google.com/feeds'; //space-delimited string or an array of scopes
 
-var PERMISSION_SCOPE = 'https://www.googleapis.com/auth/drive.readonly'; // can be a space-delimited string or an array of scopes
-
-// 6. Run this script: `node example/get_oauth2_permission.js'
+// 6. Run this script: `node get_oauth2_permission.js'
 // 7. Visit the URL printed, authenticate the google user, grant the permission
 // 8. Copy the authorization code and paste it at the prompt of this program.
 // 9. The refresh_token you get is needed with the client_id and client_secret when using edit-google-spreadsheet
-
-
 
 var oauth2Client = new OAuth2Client(CLIENT_ID, CLIENT_SECRET, 'urn:ietf:wg:oauth:2.0:oob');
 
@@ -54,19 +52,20 @@ var rl = readline.createInterface({
 
 // generate consent page url
 var url = oauth2Client.generateAuthUrl({
-  access_type: 'offline', // will return a refresh token
-  scope: PERMISSION_SCOPE });
+  access_type: 'offline',
+  scope: PERMISSION_SCOPE
+});
 
-console.log('Visit the url: ', url);
-rl.question('Enter the code here:', function(code) {
-  // request access token
+console.log('Visit this url:\n%s\n', url); // provides a refresh token
+
+rl.question('Enter the code here: ', function(code) {
+  console.log('\nGetting token...');
   oauth2Client.getToken(code, function(err, tokens) {
-    console.log('\nYour refrehs_token is %s\n', tokens.refresh_token);
-
-    console.log( 'Use this in your Spreadsheet.load():\noauth2: %s',
-      JSON.stringify( { client_id: CLIENT_ID, client_secret: CLIENT_SECRET, refresh_token: tokens.refresh_token }, true, 2 ) );
-
-    process.exit()
+    if(err)
+      return console.log("Error getting token: " + err);
+    var creds = { client_id: CLIENT_ID, client_secret: CLIENT_SECRET, refresh_token: tokens.refresh_token };
+    console.log('Use this in your Spreadsheet.load():\n"oauth2": %s', JSON.stringify(creds, true, 2));
+    process.exit(0);
   });
 });
 

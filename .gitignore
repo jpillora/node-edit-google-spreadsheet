@@ -1,2 +1,4 @@
 node_modules/
 example/creds.json
+example/oauth2-creds.json
+browseroauth2/

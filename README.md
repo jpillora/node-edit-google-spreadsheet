@@ -1,11 +1,5 @@
 ## Edit Google Spreadsheet
 
----
-
-:warning: Google has finally deprecated Client Logins, which means you can no longer authenticate with your email and password. See https://github.com/jpillora/node-edit-google-spreadsheet/issues/72 for updates.
-
----
-
 > A simple API for reading and writing Google Spreadsheets in Node.js
 
 This module aims to be a complete wrapper around the [Google Sheets API version 3.0](https://developers.google.com/google-apps/spreadsheets/). If anything is missing, create an issue, or even better, a pull request.
@@ -13,6 +7,9 @@ This module aims to be a complete wrapper around the [Google Sheets API version 
 [![NPM version](https://nodei.co/npm/edit-google-spreadsheet.png?compact=true)](https://npmjs.org/package/edit-google-spreadsheet)
 
 [![Dependency Status](https://img.shields.io/david/jpillora/node-edit-google-spreadsheet.svg?style=flat-square)](https://david-dm.org/jpillora/node-edit-google-spreadsheet)
+
+:warning: Google has finally deprecated ClientLogin, which means you can no longer authenticate with your email and password. See https://github.com/jpillora/node-edit-google-spreadsheet/issues/72 for updates.
+
 
 #### Install
 ```
@@ -33,7 +30,7 @@ Load a spreadsheet:
 
     // Choose from 1 of the 5 authentication methods:
 
-    //    1. Username and Password has been deprecated
+    //    1. Username and Password has been deprecated. OAuth2 is recommended. 
 
     // OR 2. OAuth
     oauth : {
@@ -41,7 +38,7 @@ Load a spreadsheet:
       keyFile: 'my-private-key.pem'
     },
 
-    // OR 3. OAuth2
+    // OR 3. OAuth2 (See get_oauth2_permissions.js)
     oauth2: {
       client_id: 'generated-id.apps.googleusercontent.com',
       client_secret: 'generated-secret',

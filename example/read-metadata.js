@@ -4,12 +4,9 @@ var util = require('util');
 
 Spreadsheet.load({
   debug: true,
-  username: creds.username,
-  password: creds.password,
+  oauth2: require('./cred-loader'),
   spreadsheetName: 'node-edit-spreadsheet',
   worksheetName: 'Sheet1',
-  // spreadsheetId: 'tI1mkRABSRt3tQX3b-CRPbw',
-  // worksheetId: 'od6'
 }, function run(err, spreadsheet) {
   if(err) throw err;
   
