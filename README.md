@@ -29,8 +29,8 @@ Load a spreadsheet:
     spreadsheetName: 'node-edit-spreadsheet',
     worksheetName: 'Sheet1',
 
-    // Choose from 1 of the 4 authentication methods:
-    
+    // Choose from 1 of the 5 authentication methods:
+
     //    1. Username and Password has been deprecated
 
     // OR 2. OAuth
@@ -39,13 +39,20 @@ Load a spreadsheet:
       keyFile: 'my-private-key.pem'
     },
 
-    // OR 3. Static Token
+    // OR 3. OAuth2
+    oauth2: {
+      client_id: 'generated-id.apps.googleusercontent.com',
+      client_secret: 'generated-secret',
+      refresh_token: 'token generated with get_oauth2_permission.js'
+    },
+
+    // OR 4. Static Token
     accessToken: {
       type: 'Bearer',
       token: 'my-generated-token'
     },
 
-    // OR 4. Dynamic Token
+    // OR 5. Dynamic Token
     accessToken: function(callback) {
       //... async stuff ...
       callback(null, token);
