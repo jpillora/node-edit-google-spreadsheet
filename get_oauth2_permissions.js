@@ -38,7 +38,7 @@ var CLIENT_SECRET = '';
 // and https://developers.google.com/google-apps/spreadsheets/authorize
 var PERMISSION_SCOPE = 'https://spreadsheets.google.com/feeds'; //space-delimited string or an array of scopes
 
-// 6. Run this script: `node get_oauth2_permission.js'
+// 6. Run this script: `node get_oauth2_permissions.js'
 // 7. Visit the URL printed, authenticate the google user, grant the permission
 // 8. Copy the authorization code and paste it at the prompt of this program.
 // 9. The refresh_token you get is needed with the client_id and client_secret when using edit-google-spreadsheet
