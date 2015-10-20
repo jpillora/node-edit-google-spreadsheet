@@ -1,6 +1,9 @@
 {
   "name": "edit-google-spreadsheet",
   "version": "0.2.19",
+  "scripts": {
+    "test": "mocha test --recursive"
+  },
   "dependencies": {
     "async": "^0.9.0",
     "colors": "^1.0.3",
@@ -9,7 +12,14 @@
     "googleclientlogin": "~0.2.6",
     "lodash": "^2.4.1",
     "request": "^2.51.0",
-    "xml2js": "^0.4.0"
+    "xml2js": "git://github.com/TimJohns/node-xml2js.git#master"
   },
-  "repository": "git://github.com/jpillora/node-edit-google-spreadsheet.git"
+  "repository": "git://github.com/jpillora/node-edit-google-spreadsheet.git",
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3",
+    "mockery": "^1.4.0",
+    "sinon": "^1.17.1",
+    "sinon-chai": "^2.8.0"
+  }
 }
