@@ -18,7 +18,13 @@ var mockRequest = sinon.spy(function(opts, callback) {
   );
 });
 
-var mockAuth = sinon.spy(function(opts, callback) { callback(null, 'mockToken'); });
+var mockAuth = sinon.spy(function(opts, callback) {
+  if (mockRequestCbParams.response.statusCode == 401) {
+    // we're authed now...
+    mockRequestCbParams.response.statusCode = 200;
+  }
+  callback(null, 'mockToken');
+});
 
 var opts = {
   oauth2: 'oauth2',
@@ -160,7 +166,7 @@ describe('Spreadsheet', function() {
         mockRequestCbParams = {
           err: null,
           response: { statusCode: 200 },
-          body: {},
+          body: '',
           headers: { 'content-type': 'application/atom+xml; charset=UTF-8; type=feed' }
         };
       });
@@ -200,6 +206,15 @@ describe('Spreadsheet', function() {
           done();
         });
       });
+      it('should reauth if the server returns a 401 (Unauthorized)', function(done) {
+        mockAuth.reset();
+        mockRequestCbParams.response.statusCode = 401;
+        spreadsheet.request(opts, function(err, response) {
+          expect(err).to.not.exist;
+          expect(mockAuth).to.have.been.calledOnce;
+          done();
+        });
+      });
       it('should parse text elements', function(done) {
         mockRequestCbParams.body = '<title>Income</title>';
         spreadsheet.request(opts, function(err, response) {
@@ -207,18 +222,17 @@ describe('Spreadsheet', function() {
           done();
         });
       });
-      it('should parse numeric integer elements', function(done) {
+      it('should coerce numeric integer elements', function(done) {
         mockRequestCbParams.body = '<gs:rowCount>45</gs:rowCount>';
         spreadsheet.request(opts, function(err, response) {
           expect(response['gs:rowCount']).to.equal(45);
           done();
         });
       });
-      it('should parse numeric floating elements', function(done) {
+      it('should coerce numeric floating elements', function(done) {
         mockRequestCbParams.body = "<gs:cell row='85' col='6' inputValue='=R[0]C[-1]/R[0]C[-2]' numericValue='1.2'>1.20</gs:cell>";
         spreadsheet.request(opts, function(err, response) {
-          console.log(response);
-          expect(response['gs:cell']).to.equal(1.2);
+          expect(response['gs:cell'].$t).to.equal(1.2);
           done();
         });
       });
@@ -229,7 +243,7 @@ describe('Spreadsheet', function() {
           done();
         });
       });
-      it('should parse numeric integer attributes', function(done) {
+      it('should coerce numeric integer attributes', function(done) {
         mockRequestCbParams.body = "<batch:status code='200' reason='Success'/>";
         spreadsheet.request(opts, function(err, response) {
           expect(response['batch:status'].code).to.equal(200);
@@ -237,7 +251,7 @@ describe('Spreadsheet', function() {
           done();
         });
       });
-      it('should parse numeric float attributes', function(done) {
+      it('should coerce numeric float attributes', function(done) {
         mockRequestCbParams.body = "<gs:cell row='85' col='6' inputValue='=R[0]C[-1]/R[0]C[-2]' numericValue='1.2'>1.20</gs:cell>";
         spreadsheet.request(opts, function(err, response) {
           expect(response['gs:cell'].numericValue).to.equal(1.2);
@@ -246,8 +260,19 @@ describe('Spreadsheet', function() {
         });
       });
     });
-    describe('init', function() {
-      it('should be tested');
+    describe('init', function(done) {
+      it('should get the spreadsheet id', function() {
+        mockRequest.reset();
+        Spreadsheet.create(opts, function(err, spreadsheet) {
+          spreadsheet.init(function(err) {
+            expect(err).to.not.exist();
+            expect(mockRequest).to.have.been.calledWith('stuff');
+            expect(true).to.be.false;
+            done();
+          });
+        });
+      });
+      it('should get the worksheet id');
     });
     describe('log', function() {
       it('should be tested');
@@ -256,12 +281,6 @@ describe('Spreadsheet', function() {
       it('should be tested');
     });
     describe('setToken', function() {
-      it('should be tested');
-    });
-    describe('baseUrl', function() {
-      it('should be tested');
-    });
-    describe('setTemplates', function() {
       it('should be tested');
     });
     describe('reset', function() {
