@@ -64,31 +64,28 @@ describe('Spreadsheet', function() {
     it('should throw an error if there is no callback', function() {
       expect(function() {
         Spreadsheet.create({});
-      }).to.throw(Error)
+      }).to.throw('Missing callback')
     });
     it('should return an error if there is no auth mechanism', function() {
       var errValue;
       var callback = sinon.spy(function(err) {errValue = err;});
       Spreadsheet.create({spreadsheetId: 'spreadsheetId', worksheetId: 'worksheetId'}, callback);
       expect(callback).to.have.been.calledOnce;
-      expect(errValue).to.be.an.instanceof(Error);
-      expect(Error.message).to.equal('Missing authentication information');
+      expect(errValue).to.equal('Missing authentication information');
     });
     it('should return an error if there is no spreadsheet specified', function() {
       var errValue;
       var callback = sinon.spy(function(err) {errValue = err;});
       Spreadsheet.create({oauth2: 'oauth2', worksheetId: 'worksheetId'}, callback);
       expect(callback).to.have.been.calledOnce;
-      expect(errValue).to.be.an.instanceof(Error);
-      expect(Error.message).to.equal("Missing 'spreadsheetId' or 'spreadsheetName'");
+      expect(errValue).to.equal("Missing 'spreadsheetId' or 'spreadsheetName'");
     });
     it('should return an error if there is no worksheet specified', function() {
       var errValue;
       var callback = sinon.spy(function(err) {errValue = err;});
       Spreadsheet.create({oauth2: 'oauth2', spreadsheetId: 'spreadsheetId'}, callback);
       expect(callback).to.have.been.calledOnce;
-      expect(errValue).to.be.an.instanceof(Error);
-      expect(Error.message).to.equal("Missing 'worksheetId' or 'worksheetName'");
+      expect(errValue).to.equal("Missing 'worksheetId' or 'worksheetName'");
     });
     describe('when authing with defaults', function() {
       var authParams;
@@ -172,7 +169,7 @@ describe('Spreadsheet', function() {
       });
       it('should return an error if no URL is provided', function(done) {
         spreadsheet.request({}, function(err, response) {
-          expect(err).to.be.an.instanceof(Error);
+          expect(err).to.equal('Invalid request');
           done();
         });
       });
@@ -186,14 +183,7 @@ describe('Spreadsheet', function() {
       it('should return an error if the server does not respond', function(done) {
         mockRequestCbParams.response = undefined;
         spreadsheet.request(opts, function(err, response) {
-          expect(err).to.be.an.instanceof(Error);
-          done();
-        });
-      });
-      it('should return an error if the server returns with an unexpected content type', function(done) {
-        mockRequestCbParams.response.headers = { 'content-type': 'image/svg+xml; charset=utf-8' };
-        spreadsheet.request(opts, function(err, response) {
-          expect(err).to.be.an.instanceof(Error);
+          expect(err).to.equal('no response');
           done();
         });
       });
@@ -201,8 +191,7 @@ describe('Spreadsheet', function() {
         mockRequestCbParams.response.statusCode = 500;
         mockRequestCbParams.body = 'Something broke.';
         spreadsheet.request(opts, function(err, response) {
-          expect(err).to.be.an.instanceof(Error);
-          expect(err.message).to.be('Something broke.');
+          expect(err).to.equal('Something broke.');
           done();
         });
       });
@@ -259,59 +248,6 @@ describe('Spreadsheet', function() {
           done();
         });
       });
-    });
-    describe('init', function(done) {
-      it('should get the spreadsheet id', function() {
-        mockRequest.reset();
-        Spreadsheet.create(opts, function(err, spreadsheet) {
-          spreadsheet.init(function(err) {
-            expect(err).to.not.exist();
-            expect(mockRequest).to.have.been.calledWith('stuff');
-            expect(true).to.be.false;
-            done();
-          });
-        });
-      });
-      it('should get the worksheet id');
-    });
-    describe('log', function() {
-      it('should be tested');
-    });
-    describe('getSheetId', function() {
-      it('should be tested');
-    });
-    describe('setToken', function() {
-      it('should be tested');
-    });
-    describe('reset', function() {
-      it('should be tested');
-    });
-    describe('add', function() {
-      it('should be tested');
-    });
-    describe('arr', function() {
-      it('should be tested');
-    });
-    describe('obj', function() {
-      it('should be tested');
-    });
-    describe('getNames', function() {
-      it('should be tested');
-    });
-    describe('addVal', function() {
-      it('should be tested');
-    });
-    describe('compile', function() {
-      it('should be tested');
-    });
-    describe('send', function() {
-      it('should be tested');
-    });
-    describe('receive', function() {
-      it('should be tested');
-    });
-    describe('metadata', function() {
-      it('should be tested');
     });
   });
 });
