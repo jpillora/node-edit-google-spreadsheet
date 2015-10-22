@@ -12,7 +12,7 @@
     "googleclientlogin": "~0.2.6",
     "lodash": "^2.4.1",
     "request": "^2.51.0",
-    "xml2js": "git://github.com/TimJohns/node-xml2js.git#master"
+    "xml2js": "git://github.com/TillerHQ/node-xml2js.git#master"
   },
   "repository": "git://github.com/jpillora/node-edit-google-spreadsheet.git",
   "devDependencies": {
