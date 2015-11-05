@@ -19,8 +19,7 @@
 
 var readline = require('readline');
 
-var google = require('googleapis');
-var OAuth2Client = google.auth.OAuth2;
+var OAuth2Client = require('google-auth-library').OAuth2;
 
 // Client ID and client secret are available at
 // https://code.google.com/apis/console
@@ -68,4 +67,3 @@ rl.question('Enter the code here: ', function(code) {
     process.exit(0);
   });
 });
-
