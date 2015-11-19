@@ -5,12 +5,12 @@
     "test": "mocha test --recursive"
   },
   "dependencies": {
-    "async": "^0.9.0",
+    "async": "^1.5.0",
     "colors": "^1.0.3",
+    "google-auth-library": "^0.9.6",
     "google-oauth-jwt": "~0.1.4",
-    "googleapis": "2.0.4",
-    "googleclientlogin": "~0.2.6",
-    "lodash": "^2.4.1",
+    "googleclientlogin": "~0.2.8",
+    "lodash": "^3.10.1",
     "request": "^2.51.0",
     "xml2js": "^0.4.15"
   },
