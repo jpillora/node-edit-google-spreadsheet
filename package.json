@@ -9,7 +9,7 @@
     "colors": "^1.0.3",
     "google-auth-library": "^0.9.6",
     "google-oauth-jwt": "~0.1.4",
-    "googleclientlogin": "~0.2.6",
+    "googleclientlogin": "~0.2.8",
     "lodash": "^3.10.1",
     "request": "^2.51.0",
     "xml2js": "^0.4.15"
