@@ -92,6 +92,30 @@ Read sheet:
 
   }
 ```
+
+#### `async` / `await` Usage
+
+All functions which have a `callback` return a `Promise` tied
+to that callback and can therefore be used with `async` / `await`.
+
+```js
+
+const Spreadsheet = require("../");
+
+(async function example() {
+  let spreadsheet = await Spreadsheet.load({
+    debug: true,
+    oauth2: ...,
+    spreadsheetName: "node-spreadsheet-example",
+    worksheetName: "Sheet1"
+  });
+  //receive all cells
+  let [rows, info] = await spreadsheet.receive({getValues: false});
+  console.log("Found rows:", rows);
+  console.log("With info:", info);
+})().catch;
+```
+
 #### Metadata
 
 Get metadata
