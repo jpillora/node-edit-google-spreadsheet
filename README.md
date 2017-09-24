@@ -25,7 +25,7 @@ Load a spreadsheet:
 
   Spreadsheet.load({
     debug: true,
-    spreadsheetName: 'node-edit-spreadsheet',
+    spreadsheetName: 'edit-spreadsheet-example',
     worksheetName: 'Sheet1',
 
     // Choose from 1 of the 5 authentication methods:
