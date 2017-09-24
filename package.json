@@ -1,18 +1,17 @@
 {
   "name": "edit-google-spreadsheet",
-  "version": "0.2.21",
+  "version": "0.3.0",
   "scripts": {
     "test": "mocha test --recursive"
   },
   "dependencies": {
-    "async": "^1.5.0",
-    "colors": "^1.0.3",
     "google-auth-library": "^0.9.6",
-    "google-oauth-jwt": "~0.1.4",
-    "googleclientlogin": "~0.2.8",
-    "lodash": "^3.10.1",
-    "request": "^2.51.0",
-    "xml2js": "^0.4.15"
+    "async": "^2.5.0",
+    "colors": "^1.1.2",
+    "google-oauth-jwt": "^0.2.0",
+    "lodash": "^4.17.4",
+    "request": "^2.82.0",
+    "xml2js": "^0.4.19"
   },
   "repository": "git://github.com/jpillora/node-edit-google-spreadsheet.git",
   "devDependencies": {

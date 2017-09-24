@@ -1,21 +1,21 @@
-var Spreadsheet = require('../');
-var creds = require('./cred-loader');
-var util = require('util');
+var Spreadsheet = require("../");
+var creds = require("./cred-loader");
+var util = require("util");
 
-Spreadsheet.load({
-  debug: true,
-  oauth2: require('./cred-loader'),
-  spreadsheetName: 'node-edit-spreadsheet',
-  worksheetName: 'Sheet1',
-}, function run(err, spreadsheet) {
-  if(err) throw err;
-  
-  spreadsheet.metadata(function(err, metadata){
-    if(err) throw err;
-
-    console.log(metadata);
-    // { title: 'Sheet1', rowCount: '100', colCount: '20',
-    //   updated: Sun Jul 28 2013 12:07:31 GMT+1000 (EST) }
-  });
-});
-
+Spreadsheet.load(
+  {
+    debug: true,
+    oauth2: require("./cred-loader"),
+    spreadsheetName: "edit-spreadsheet-example",
+    worksheetName: "Sheet1"
+  },
+  function run(err, spreadsheet) {
+    if (err) throw err;
+    spreadsheet.metadata(function(err, metadata) {
+      if (err) throw err;
+      console.log(metadata);
+      // { title: 'Sheet1', rowCount: '100', colCount: '20',
+      //   updated: Sun Jul 28 2013 12:07:31 GMT+1000 (EST) }
+    });
+  }
+);
