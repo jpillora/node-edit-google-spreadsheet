@@ -1,3 +1,20 @@
+# DEPRECATED
+
+:warning: This module has been deprecated.
+
+Instead of upgrading this old Google Spreadsheets module to support the Google Sheets v4 API, I've chosen to deprecate it, and provide a guide on how to use the `googleapis` module directly. The `googleapis` module, along with the Sheets v4 API provides:
+
+- Faster responses
+- More features
+- Uses JSON instead of XML
+- `async`/`await` support
+
+Please see this new repository for more information
+
+### https://github.com/jpillora/node-google-sheets
+
+---
+
 ## Edit Google Spreadsheet
 
 > A simple API for reading and writing Google Spreadsheets in Node.js
@@ -10,8 +27,8 @@ This module aims to be a complete wrapper around the [Google Sheets API version 
 
 :warning: Google has finally deprecated ClientLogin, which means you can no longer authenticate with your email and password. See https://github.com/jpillora/node-edit-google-spreadsheet/issues/72 for updates.
 
-
 #### Install
+
 ```
 npm install edit-google-spreadsheet
 ```
@@ -20,35 +37,36 @@ npm install edit-google-spreadsheet
 
 Load a spreadsheet:
 
-``` js
-  var Spreadsheet = require('edit-google-spreadsheet');
+```js
+var Spreadsheet = require("edit-google-spreadsheet");
 
-  Spreadsheet.load({
+Spreadsheet.load(
+  {
     debug: true,
-    spreadsheetName: 'edit-spreadsheet-example',
-    worksheetName: 'Sheet1',
+    spreadsheetName: "edit-spreadsheet-example",
+    worksheetName: "Sheet1",
 
     // Choose from 1 of the 5 authentication methods:
 
-    //    1. Username and Password has been deprecated. OAuth2 is recommended. 
+    //    1. Username and Password has been deprecated. OAuth2 is recommended.
 
     // OR 2. OAuth
-    oauth : {
-      email: 'my-name@google.email.com',
-      keyFile: 'my-private-key.pem'
+    oauth: {
+      email: "my-name@google.email.com",
+      keyFile: "my-private-key.pem"
     },
 
     // OR 3. OAuth2 (See get_oauth2_permissions.js)
     oauth2: {
-      client_id: 'generated-id.apps.googleusercontent.com',
-      client_secret: 'generated-secret',
-      refresh_token: 'token generated with get_oauth2_permission.js'
+      client_id: "generated-id.apps.googleusercontent.com",
+      client_secret: "generated-secret",
+      refresh_token: "token generated with get_oauth2_permission.js"
     },
 
     // OR 4. Static Token
     accessToken: {
-      type: 'Bearer',
-      token: 'my-generated-token'
+      type: "Bearer",
+      token: "my-generated-token"
     },
 
     // OR 5. Dynamic Token
@@ -56,41 +74,42 @@ Load a spreadsheet:
       //... async stuff ...
       callback(null, token);
     }
-  }, function sheetReady(err, spreadsheet) {
+  },
+  function sheetReady(err, spreadsheet) {
     //use speadsheet!
-  });
+  }
+);
 ```
 
-*Note: Using the options `spreadsheetName` and `worksheetName` will cause lookups for `spreadsheetId` and `worksheetId`. Use `spreadsheetId` and `worksheetId` for improved performance.*
+_Note: Using the options `spreadsheetName` and `worksheetName` will cause lookups for `spreadsheetId` and `worksheetId`. Use `spreadsheetId` and `worksheetId` for improved performance._
 
 Update sheet:
 
-``` js
-  function sheetReady(err, spreadsheet) {
-    if(err) throw err;
+```js
+function sheetReady(err, spreadsheet) {
+  if (err) throw err;
 
-    spreadsheet.add({ 3: { 5: "hello!" } });
+  spreadsheet.add({ 3: { 5: "hello!" } });
 
-    spreadsheet.send(function(err) {
-      if(err) throw err;
-      console.log("Updated Cell at row 3, column 5 to 'hello!'");
-    });
-  }
+  spreadsheet.send(function(err) {
+    if (err) throw err;
+    console.log("Updated Cell at row 3, column 5 to 'hello!'");
+  });
+}
 ```
 
 Read sheet:
 
-``` js
-  function sheetReady(err, spreadsheet) {
-    if(err) throw err;
+```js
+function sheetReady(err, spreadsheet) {
+  if (err) throw err;
 
-    spreadsheet.receive(function(err, rows, info) {
-      if(err) throw err;
-      console.log("Found rows:", rows);
-      // Found rows: { '3': { '5': 'hello!' } }
-    });
-
-  }
+  spreadsheet.receive(function(err, rows, info) {
+    if (err) throw err;
+    console.log("Found rows:", rows);
+    // Found rows: { '3': { '5': 'hello!' } }
+  });
+}
 ```
 
 #### `async` / `await` Usage
@@ -120,24 +139,24 @@ const Spreadsheet = require("../");
 
 Get metadata
 
-``` js
-  function sheetReady(err, spreadsheet) {
-    if(err) throw err;
-    
-    spreadsheet.metadata(function(err, metadata){
-      if(err) throw err;
-      console.log(metadata);
-      // { title: 'Sheet3', rowCount: '100', colCount: '20', updated: [Date] }
-    });
-  }
+```js
+function sheetReady(err, spreadsheet) {
+  if (err) throw err;
+
+  spreadsheet.metadata(function(err, metadata) {
+    if (err) throw err;
+    console.log(metadata);
+    // { title: 'Sheet3', rowCount: '100', colCount: '20', updated: [Date] }
+  });
+}
 ```
 
 Set metadata
 
-``` js
+```js
   function sheetReady(err, spreadsheet) {
     if(err) throw err;
-    
+
     spreadsheet.metadata({
       title: 'Sheet2'
       rowCount: 100,
@@ -149,65 +168,66 @@ Set metadata
   }
 ```
 
-***WARNING: all cells outside the range of the new size will be silently deleted***
+**_WARNING: all cells outside the range of the new size will be silently deleted_**
 
 #### More `add` Examples
 
 Batch edit:
 
-``` js
-spreadsheet.add([[1,2,3],
-                 [4,5,6]]);
+```js
+spreadsheet.add([[1, 2, 3], [4, 5, 6]]);
 ```
 
 Batch edit starting from row 5:
 
-``` js
+```js
 spreadsheet.add({
-  5: [[1,2,3],
-      [4,5,6]]
+  5: [[1, 2, 3], [4, 5, 6]]
 });
 ```
 
 Batch edit starting from row 5, column 7:
 
-``` js
+```js
 spreadsheet.add({
   5: {
-    7: [[1,2,3],
-        [4,5,6]]
+    7: [[1, 2, 3], [4, 5, 6]]
   }
 });
 ```
 
 Formula building with named cell references:
-``` js
+
+```js
 spreadsheet.add({
   3: {
     4: { name: "a", val: 42 }, //'42' though tagged as "a"
     5: { name: "b", val: 21 }, //'21' though tagged as "b"
-    6: "={{ a }}+{{ b }}"      //forumla adding row3,col4 with row3,col5 => '=D3+E3'
+    6: "={{ a }}+{{ b }}" //forumla adding row3,col4 with row3,col5 => '=D3+E3'
   }
 });
 ```
-*Note: cell `a` and `b` are looked up on `send()`*
+
+_Note: cell `a` and `b` are looked up on `send()`_
 
 #### API
-
 
 ##### `Spreadsheet.load( options, callback( err, spreadsheet ) )`
 
 See [Options](https://github.com/jpillora/node-edit-google-spreadsheet#options) below
 
 ##### spreadsheet.`add( obj | array )`
+
 Add cells to the batch. See examples.
 
 ##### spreadsheet.`send( [options,] callback( err ) )`
+
 Sends off the batch of `add()`ed cells. Clears all cells once complete.
 
-`options.autoSize` When required, increase the worksheet size (rows and columns) in order to fit the batch - *NOTE: When enabled, this will trigger an extra request on every `send()`* (default `false`).
+`options.autoSize` When required, increase the worksheet size (rows and columns) in order to fit the batch - _NOTE: When enabled, this will trigger an extra request on every `send()`_ (default `false`).
 
 ##### spreadsheet.`receive( [options,] callback( err , rows , info ) )`
+
 Recieves the entire spreadsheet. The `rows` object is an object in the same format as the cells you `add()`, so `add(rows)` will be valid. The `info` object looks like:
 
 ```
@@ -229,52 +249,61 @@ Recieves the entire spreadsheet. The `rows` object is an object in the same form
 
 Get and set metadata
 
-*Note: when setting new metadata, if `rowCount` and/or `colCount` is left out,
-an extra request will be made to retrieve the missing data.*
+_Note: when setting new metadata, if `rowCount` and/or `colCount` is left out,
+an extra request will be made to retrieve the missing data._
 
 ##### spreadsheet.`raw`
 
-The raw data recieved from Google when enumerating the spreedsheet and worksheet lists, *which are triggered when searching for IDs*. In order to see this array of all spreadsheets (`raw.spreadsheets`) the `spreadsheetName` option must be used. Similarly for worksheets (`raw.worksheets`), the `worksheetName` options must be used.
+The raw data recieved from Google when enumerating the spreedsheet and worksheet lists, _which are triggered when searching for IDs_. In order to see this array of all spreadsheets (`raw.spreadsheets`) the `spreadsheetName` option must be used. Similarly for worksheets (`raw.worksheets`), the `worksheetName` options must be used.
 
 #### Options
 
 ##### `callback`
+
 Function returning the authenticated Spreadsheet instance.
 
 ##### `debug`
+
 If `true`, will display colourful console logs outputing current actions.
 
 ##### `username` `password`
-Google account - *Be careful about committing these to public repos*.
+
+Google account - _Be careful about committing these to public repos_.
 
 ##### `oauth`
-OAuth configuration object. See [google-oauth-jwt](https://github.com/extrabacon/google-oauth-jwt#specifying-options). *By default `oauth.scopes` is set to `['https://spreadsheets.google.com/feeds']` (`https` if `useHTTPS`)*
+
+OAuth configuration object. See [google-oauth-jwt](https://github.com/extrabacon/google-oauth-jwt#specifying-options). _By default `oauth.scopes` is set to `['https://spreadsheets.google.com/feeds']` (`https` if `useHTTPS`)_
 
 ##### `accessToken`
+
 Reuse a generated access `token` of the given `type`. If you set `accessToken` to an object, reauthentications will not work. Instead use a `function accessToken(callback(err, token)) { ... }` function, to allow token generation when required.
 
 ##### `spreadsheetName` `spreadsheetId`
+
 The spreadsheet you wish to edit. Either the Name or Id is required.
 
 ##### `worksheetName` `worksheetId`
+
 The worksheet you wish to edit. Either the Name or Id is required.
 
 ##### `useHTTPS`
+
 Whether to use `https` when connecting to Google (default: `true`)
 
 ##### `useCellTextValues`
+
 Return text values for cells or return values as typed. (default: `true`)
 
 #### Todo
 
-* Create New Spreadsheets
-* Read specific range of cells
-* Option to cache auth token in file
+- Create New Spreadsheets
+- Read specific range of cells
+- Option to cache auth token in file
 
 #### FAQ
 
-* Q: How do I append rows to my spreadsheet ?
-* A: Using the `info` object returned from `receive()`, one could always begin `add()`ing at the `lastRow + 1`, thereby appending to the spreadsheet.
+- Q: How do I append rows to my spreadsheet ?
+- A: Using the `info` object returned from `receive()`, one could always begin `add()`ing at the `lastRow + 1`, thereby appending to the spreadsheet.
 
 #### Credits
 
@@ -282,7 +311,7 @@ Thanks to `googleclientlogin` for easy Google API ClientLogin Tokens
 
 #### References
 
-* https://developers.google.com/google-apps/spreadsheets/
+- https://developers.google.com/google-apps/spreadsheets/
 
 #### Donate
 
